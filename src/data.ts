@@ -1,8 +1,3 @@
-export interface NavItem {
-  label: string;
-  link: string;
-}
-
 export interface CareerItem {
   role: string;
   company: string;
@@ -22,23 +17,8 @@ export interface ProjectItem {
 export interface ContactItem {
   label: string;
   url: string;
-  icon: 'github' | 'linkedin' | 'mail' | 'file';
+  icon: 'github' | 'linkedin' | 'mail' | 'file' | 'twitter';
 }
-
-export const NAV_ITEMS: NavItem[] = [
-  { label: 'Home', link: '#top' },
-  { label: 'About Me', link: '#about-me' },
-  { label: 'Experience & Education', link: '#experience' },
-  { label: 'Projects', link: '#projects' },
-  { label: 'Get In Touch', link: '#contact' },
-];
-
-export const ABOUT_TEXT = {
-  intro:
-    "Hi, I'm Himanshu Jaiswal. I'm a Frontend Architect specializing in React, TypeScript, and high-performance web applications.",
-  bio:
-    'I have a passion for high-performance frontend systems, robust architectures, and building scalable products that solve real-world problems. I bridge the gap between complex technical requirements and production-ready code.',
-};
 
 export const EXPERIENCE: CareerItem[] = [
   {
@@ -129,7 +109,7 @@ export const CONTACT_LINKS: ContactItem[] = [
     icon: 'linkedin',
     url: 'https://www.linkedin.com/in/dev-himanshu-jaiswal',
   },
-  { label: 'X (Twitter)', icon: 'twitter' as any, url: 'https://x.com/io_ohimanshu' },
+  { label: 'X (Twitter)', icon: 'twitter', url: 'https://x.com/io_ohimanshu' },
   { label: 'Email', icon: 'mail', url: 'mailto:iam.himanshu.x@gmail.com' },
   { label: 'Resume', icon: 'file', url: '#' },
 ];

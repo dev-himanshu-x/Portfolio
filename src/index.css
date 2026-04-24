@@ -1,65 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
-@layer components {
-  .screen-section {
-    @apply w-full flex items-center justify-center transition-all pt-20 pb-48;
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    @apply bg-[#0a192f] text-white;
   }
 
-  .container {
-    @apply mx-auto px-4;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Poppins', sans-serif;
   }
+}
 
-  .content-left {
-    @apply flex-[2];
-  }
-
-  .content-right {
-    @apply flex-1 max-w-[600px] min-w-[200px] relative;
-  }
-
-  .icon-btn {
-    @apply transition-all hover:scale-110 active:rotate-12;
-  }
-
-  .contact-btn {
-    @apply flex items-center space-x-2;
-  }
-
-  .contact-btn>svg {
-    @apply block transition-all;
-  }
-
-  .contact-btn>span {
-    @apply text-gray-950 font-semibold;
-  }
-
-  .contact-btn:hover>svg {
-    @apply scale-110;
-  }
-
-  .contact-btn:active>svg {
-    @apply rotate-12;
-  }
-
-  .text-body {
-    @apply text-white/60;
-  }
-
-  .markdown-box li {
-    @apply list-disc list-outside ml-4;
-  }
-
-  #project-list::-webkit-scrollbar-track {
-    @apply bg-white/10 rounded-lg;
-  }
-
-  #project-list::-webkit-scrollbar {
-    @apply h-2 rounded-lg border-2 border-gray-900;
-  }
-
-  #project-list::-webkit-scrollbar-thumb {
-    @apply bg-white rounded-lg;
+@layer utilities {
+  .animate-float-slow {
+    animation: float 8s ease-in-out infinite;
   }
 
   .animate-swim {
@@ -69,39 +29,76 @@
   .animate-swim-reverse {
     animation: swim-reverse 25s linear infinite;
   }
-
-  .animate-float-slow {
-    animation: float 8s ease-in-out infinite;
-  }
 }
 
 @keyframes swim {
-  0% { transform: translateX(-150vw) translateY(0) scaleX(1); }
-  49% { transform: translateX(150vw) translateY(20px) scaleX(1); }
-  50% { transform: translateX(150vw) translateY(20px) scaleX(-1); }
-  99% { transform: translateX(-150vw) translateY(-20px) scaleX(-1); }
-  100% { transform: translateX(-150vw) translateY(0) scaleX(1); }
+  0% {
+    transform: translateX(-150vw) translateY(0) scaleX(1);
+  }
+
+  49% {
+    transform: translateX(150vw) translateY(20px) scaleX(1);
+  }
+
+  50% {
+    transform: translateX(150vw) translateY(20px) scaleX(-1);
+  }
+
+  99% {
+    transform: translateX(-150vw) translateY(-20px) scaleX(-1);
+  }
+
+  100% {
+    transform: translateX(-150vw) translateY(0) scaleX(1);
+  }
 }
 
 @keyframes swim-reverse {
-  0% { transform: translateX(150vw) translateY(0) scaleX(-1); }
-  49% { transform: translateX(-150vw) translateY(30px) scaleX(-1); }
-  50% { transform: translateX(-150vw) translateY(30px) scaleX(1); }
-  99% { transform: translateX(150vw) translateY(-10px) scaleX(1); }
-  100% { transform: translateX(150vw) translateY(0) scaleX(-1); }
+  0% {
+    transform: translateX(150vw) translateY(0) scaleX(-1);
+  }
+
+  49% {
+    transform: translateX(-150vw) translateY(30px) scaleX(-1);
+  }
+
+  50% {
+    transform: translateX(-150vw) translateY(30px) scaleX(1);
+  }
+
+  99% {
+    transform: translateX(150vw) translateY(-10px) scaleX(1);
+  }
+
+  100% {
+    transform: translateX(150vw) translateY(0) scaleX(-1);
+  }
 }
 
 @keyframes float {
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-30px) rotate(5deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-30px) rotate(5deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
 }
 
 body {
   font-family: 'Inter', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Poppins', sans-serif;
 }
 
@@ -120,14 +117,9 @@ body {
   --b4: #0e2431;
 }
 
-@keyframes twinkle-tiles {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(0.5); }
-}
-
 .handcrafted-sky-tiles {
-  background-color: #020617; 
-  background-image: 
+  background-color: #0a192f;
+  background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cg fill='%23fff' opacity='0.9'%3E%3Ccircle cx='15' cy='25' r='1'/%3E%3Ccircle cx='85' cy='15' r='1.5'/%3E%3Ccircle cx='125' cy='65' r='1'/%3E%3Ccircle cx='15' cy='115' r='2'/%3E%3Ccircle cx='95' cy='185' r='1'/%3E%3Ccircle cx='145' cy='165' r='1'/%3E%3Ccircle cx='25' cy='125' r='1.5'/%3E%3Ccircle cx='100' cy='50' r='1'/%3E%3Ccircle cx='50' cy='100' r='2'/%3E%3C/g%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cg fill='%23fff' opacity='0.7'%3E%3Ccircle cx='45' cy='85' r='2'/%3E%3Ccircle cx='185' cy='35' r='1.5'/%3E%3Ccircle cx='55' cy='155' r='2.5'/%3E%3Ccircle cx='195' cy='195' r='1.5'/%3E%3Ccircle cx='105' cy='95' r='2'/%3E%3Ccircle cx='255' cy='225' r='1.5'/%3E%3Ccircle cx='285' cy='105' r='1.5'/%3E%3Ccircle cx='150' cy='200' r='2'/%3E%3C/g%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='350' height='350'%3E%3Cg fill='%23fff' opacity='0.4'%3E%3Ccircle cx='105' cy='205' r='3'/%3E%3Ccircle cx='305' cy='105' r='2.5'/%3E%3Ccircle cx='205' cy='355' r='3.5'/%3E%3Ccircle cx='385' cy='255' r='3'/%3E%3Ccircle cx='150' cy='50' r='2'/%3E%3Ccircle cx='250' cy='280' r='4'/%3E%3C/g%3E%3C/svg%3E");
@@ -135,5 +127,47 @@ body {
   background-position: 0 0, 50px 50px, 100px 100px;
   background-attachment: fixed;
   background-repeat: repeat;
-  animation: twinkle-tiles 6s ease-in-out infinite;
+  animation: none;
+}
+@keyframes music-bar {
+  0%, 100% {
+    height: 4px;
+    opacity: 0.4;
+  }
+  50% {
+    height: 12px;
+    opacity: 1;
+  }
+}
+
+.animate-music-bar {
+  animation: music-bar 1s ease-in-out infinite;
+}
+
+@keyframes music-bar-varied {
+  0%, 100% {
+    height: 10%;
+    opacity: 0.3;
+  }
+  50% {
+    height: 100%;
+    opacity: 1;
+  }
+}
+
+.animate-music-bar-varied {
+  animation: music-bar-varied 1.2s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
 }

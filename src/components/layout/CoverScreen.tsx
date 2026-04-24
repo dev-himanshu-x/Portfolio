@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import octopusSrc from '../assets/octopus.svg';
-import seashoreSrc from '../assets/seashore.png';
+import octopusSrc from '../../assets/images/octopus.svg';
 
 const TILE_SIZE = 60;
 
@@ -68,12 +67,23 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
   }, [scratchStarted]);
 
   const handleEnter = () => {
-    if (!scratchStarted) return;
+    setScratchStarted(true);
     setIsEntering(true);
     setTimeout(() => {
       onDone?.();
     }, 1000);
   };
+
+  const starDelays = useMemo(() => {
+    if (!rows || !cols) return {};
+    const delays: Record<string, string> = {};
+    rows.forEach(r => {
+      cols.forEach(c => {
+        delays[`${r}.${c}`] = `${Math.random() * 5}s`;
+      });
+    });
+    return delays;
+  }, [rows, cols]);
 
   const tiles = useMemo(() => {
     if (!rows || !cols) return null;
@@ -97,18 +107,17 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
                 "w-[60px] min-w-[60px] h-[60px] transition-all duration-700 ease-out handcrafted-sky-tiles",
                 isHidden ? "opacity-0 pointer-events-none scale-0" : "opacity-100"
               )}
+              style={{ animationDelay: starDelays[key] }}
             />
           );
         })}
       </div>
     ));
-  }, [cols, hiddenKeys, hideTile, rows]);
+  }, [cols, hiddenKeys, hideTile, rows, starDelays]);
 
-  // Calculate opacity based on scratched tiles
   const scratchedCount = Object.keys(hiddenKeys).length;
   const totalTiles = nX * nY;
   const scratchRatio = totalTiles > 0 ? scratchedCount / totalTiles : 0;
-  // Fade out smoothly after a tiny bit of scratching
   const contentOpacity = Math.max(0, 1 - (scratchRatio * 5));
 
   return (
@@ -119,40 +128,21 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
       )}
       onClick={handleEnter}
     >
-
-      {/* Grid of Scratchable Tiles */}
       <div className="absolute inset-0 z-10 select-none overflow-hidden">{tiles}</div>
 
-      {/* Actual Seashore Image with gray filter */}
-      <img 
-        src={seashoreSrc} 
-        alt="Seashore" 
-        className="absolute bottom-0 left-0 w-full h-[25vh] md:h-[35vh] object-cover pointer-events-none z-20"
-        style={{ 
-          opacity: contentOpacity, 
-          transition: 'opacity 0.4s ease-out',
-          filter: 'grayscale(100%) brightness(0.6)'
-        }} 
-      />
-
-      {/* Centered Welcome Text & Instructions */}
-      <div 
+      <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center justify-center pointer-events-none w-full"
         style={{ opacity: contentOpacity, transition: 'opacity 0.4s ease-out' }}
       >
-        
         <h1 className="text-[16vw] md:text-[13rem] font-bold text-white leading-[1] tracking-tighter flex items-center justify-center select-none whitespace-nowrap relative">
           Welcome
-          
-          {/* Floating Octopus (by the side of the 'e', slightly above) */}
-          <img 
-            src={octopusSrc} 
-            alt="octopus" 
+          <img
+            src={octopusSrc}
+            alt="octopus"
             className="absolute -right-[25%] md:-right-[20%] top-0 md:top-[10%] w-[30vw] md:w-[300px] animate-float-slow drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] z-40"
           />
         </h1>
-        
-        {/* Plain Text Instructions */}
+
         <p className="mt-8 md:mt-16 text-white font-medium tracking-[0.3em] md:tracking-[0.5em] uppercase text-[10px] md:text-sm">
           Scratch or tap anywhere to explore
         </p>

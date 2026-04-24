@@ -1,20 +1,41 @@
 import { Github, ArrowUpRight, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
-import { useGitHubProjects, GitHubRepo } from '../hooks/useGitHubProjects';
+import { useGitHubProjects } from '../../hooks/useGitHubProjects';
+import type { GitHubRepo } from '../../hooks/useGitHubProjects';
 
 const INITIAL_COUNT = 4;
 
-function formatYear(dateStr: string) {
-  return new Date(dateStr).getFullYear();
-}
+// Custom display order — repos listed here appear first in this order
+const REPO_ORDER = [
+  'hospital-management-angularjs-bootstrap',
+  'react-webrtc-peerjs-chat',
+  'tanstack-task-planner',
+  'react-vite-weather-app',
+  'react-mui-todo',
+  'tanstack-dynamic-table',
+  'react-tic-tac-toe',
+  'tanstack-todo-typescript',
+  'react-antd-form', // User requested AntD Form be last
+];
 
 export default function Projects() {
   const { repos, loading, error } = useGitHubProjects();
-  const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? repos : repos.slice(0, INITIAL_COUNT);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
+
+  const sorted = [...repos].sort((a, b) => {
+    const ai = REPO_ORDER.indexOf(a.name);
+    const bi = REPO_ORDER.indexOf(b.name);
+    if (ai === -1 && bi === -1) return 0;
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
+  const visible = sorted.slice(0, visibleCount);
+  const hasMore = visibleCount < sorted.length;
 
   return (
-    <div className="screen-section relative bg-[#020c1b] text-white py-32 overflow-hidden">
+    <div className="w-full flex items-center justify-center transition-all relative bg-[#020c1b] text-white py-32 overflow-hidden">
       <div id="projects" className="absolute top-0" />
 
       {/* Ambient glows */}
@@ -31,7 +52,7 @@ export default function Projects() {
               <span className="text-xs font-black uppercase tracking-[0.4em]">Projects</span>
             </div>
 
-            <h1 className="text-7xl sm:text-8xl xl:text-9xl font-black tracking-tighter leading-[0.85] text-white">
+            <h1 className="text-5xl sm:text-8xl xl:text-9xl font-black tracking-tighter leading-[0.85] text-white">
               FEATURED<br />
               <span className="text-cyan-600/70">WORKS</span>
             </h1>
@@ -66,17 +87,24 @@ export default function Projects() {
 
             {/* Show More / Show Less */}
             {repos.length > INITIAL_COUNT && (
-              <div className="mt-12 flex justify-center">
-                <button
-                  onClick={() => setShowAll(prev => !prev)}
-                  className="group flex items-center gap-3 px-8 py-4 border border-cyan-800/40 rounded-2xl text-sm font-black uppercase tracking-widest text-cyan-400/70 hover:border-cyan-400 hover:text-white hover:bg-cyan-950/40 transition-all duration-300"
-                >
-                  {showAll ? (
-                    <><ChevronUp size={16} className="group-hover:-translate-y-0.5 transition-transform" /> Show Less</>
-                  ) : (
-                    <><ChevronDown size={16} className="group-hover:translate-y-0.5 transition-transform" /> Show More ({repos.length - INITIAL_COUNT} more)</>
-                  )}
-                </button>
+              <div className="mt-12 flex justify-center gap-4">
+                {hasMore ? (
+                  <button
+                    onClick={() => setVisibleCount(prev => Math.min(prev + 4, repos.length))}
+                    className="group flex items-center gap-3 px-8 py-4 border border-cyan-800/40 rounded-2xl text-sm font-black uppercase tracking-widest text-cyan-400/70 hover:border-cyan-400 hover:text-white hover:bg-cyan-950/40 transition-all duration-300"
+                  >
+                    <ChevronDown size={16} className="group-hover:translate-y-0.5 transition-transform" />
+                    Show More ({Math.min(4, repos.length - visibleCount)} more)
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setVisibleCount(INITIAL_COUNT)}
+                    className="group flex items-center gap-3 px-8 py-4 border border-cyan-800/40 rounded-2xl text-sm font-black uppercase tracking-widest text-cyan-400/70 hover:border-cyan-400 hover:text-white hover:bg-cyan-950/40 transition-all duration-300"
+                  >
+                    <ChevronUp size={16} className="group-hover:-translate-y-0.5 transition-transform" />
+                    Show Less
+                  </button>
+                )}
               </div>
             )}
           </>
@@ -88,7 +116,6 @@ export default function Projects() {
 }
 
 function ProjectCard({ repo, index }: { repo: GitHubRepo; index: number }) {
-  const year = formatYear(repo.pushed_at);
   const tech = repo.topics.length > 0 ? repo.topics : [];
 
   return (
@@ -112,8 +139,7 @@ function ProjectCard({ repo, index }: { repo: GitHubRepo; index: number }) {
         {/* Main content */}
         <div className="flex-1 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-            <div className="space-y-2">
-              <span className="text-xs font-bold text-cyan-500/30 tracking-[0.3em] uppercase">{year}</span>
+            <div>
               <h3 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight group-hover:text-cyan-50 transition-colors duration-300">
                 {repo.name.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
               </h3>

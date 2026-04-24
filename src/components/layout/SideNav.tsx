@@ -18,7 +18,7 @@ const MenuItem = ({ label, link, iconName }: { label: string, link: string, icon
       <a
         href={link}
         aria-label={label}
-        className="icon-btn text-xl p-1 block"
+        className="transition-all hover:scale-110 active:rotate-12 text-xl p-1 block"
         onClick={(e) => {
           e.preventDefault();
           const target = document.querySelector(link);

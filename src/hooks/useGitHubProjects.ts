@@ -13,6 +13,20 @@ export interface GitHubRepo {
   fork: boolean;
 }
 
+// Fallback descriptions for repos that don't have one set on GitHub
+const FALLBACK_DESCRIPTIONS: Record<string, string> = {
+  'portfolio': 'An immersive deep-sea themed single-page portfolio with scratch-to-reveal entry, parallax marine animations, and a fully responsive React architecture.',
+  'react-vite-weather-app': 'A responsive weather application with real-time data fetching via the Open-Meteo API, dynamic glassmorphism UI, and city-based search for Indian locations.',
+  'hospital-management-angularjs-bootstrap': 'A full-featured hospital workflow system with appointment scheduling, patient records management, and role-specific dashboards.',
+  'react-mui-todo': 'A polished todo manager built with Material UI featuring drag-and-drop task organization, priority tagging, and persistent local storage.',
+  'react-antd-form': 'A dynamic form engine with multi-step flows, real-time validation, and reusable field schemas powered by Ant Design.',
+  'react-webrtc-peerjs-chat': 'A peer-to-peer video chat application with screen sharing, live text messaging, and room-based collaboration using WebRTC and PeerJS.',
+  'tanstack-dynamic-table': 'A highly configurable data table with sorting, filtering, pagination, and column resizing — built with full TypeScript type safety.',
+  'tanstack-task-planner': 'A powerful task management system featuring dynamic scheduling, priority organization, and real-time state management using TanStack Query.',
+  'react-tic-tac-toe': 'A classic Tic-Tac-Toe game with a modern UI, featuring local multiplayer and intelligent state management.',
+  'tanstack-todo-typescript': 'A robust Todo application built with TanStack Query and TypeScript, showcasing advanced state synchronization and type-safe data handling.',
+};
+
 const GITHUB_USERNAME = 'dev-himanshu-x';
 
 // Repos to exclude (forks, archived, or unrelated)
@@ -40,7 +54,11 @@ export function useGitHubProjects() {
 
         const filtered = data
           .filter(r => !r.fork && !EXCLUDED_REPOS.includes(r.name))
-          .sort((a, b) => new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime());
+          .sort((a, b) => new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
+          .map(r => ({
+            ...r,
+            description: r.description || FALLBACK_DESCRIPTIONS[r.name] || null,
+          }));
 
         setRepos(filtered);
       } catch (err: any) {

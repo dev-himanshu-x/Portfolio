@@ -6,21 +6,20 @@ import {
   createRoute,
   createRootRoute,
 } from '@tanstack/react-router'
-import CoverScreen from './components/CoverScreen'
-import Hero from './components/Hero'
-import About from './components/About'
-import Experience from './components/Experience'
-import Projects from './components/Projects'
-import Contact from './components/Contact'
-import SideNav from './components/SideNav'
-
+import { ParallaxProvider } from 'react-scroll-parallax'
+import CoverScreen from './components/layout/CoverScreen'
+import Hero from './components/sections/Hero'
+import About from './components/sections/About'
+import Experience from './components/sections/Experience'
+import Projects from './components/sections/Projects'
+import Contact from './components/sections/Contact'
+import SideNav from './components/layout/SideNav'
 
 const rootRoute = createRootRoute({
   component: () => {
     const [isIntroDone, setIsIntroDone] = useState(false)
 
     const handleIntroDone = () => {
-      console.log('Intro done, showing main content');
       window.scrollTo(0, 0);
       setIsIntroDone(true);
     };
@@ -53,10 +52,7 @@ const indexRoute = createRoute({
   ),
 })
 
-import { ParallaxProvider } from 'react-scroll-parallax'
-
 const routeTree = rootRoute.addChildren([indexRoute])
-
 const router = createRouter({ routeTree })
 
 declare module '@tanstack/react-router' {
@@ -72,4 +68,3 @@ export default function App() {
     </ParallaxProvider>
   )
 }
-

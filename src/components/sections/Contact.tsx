@@ -2,10 +2,10 @@ import { Parallax } from 'react-scroll-parallax';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faFileAlt } from '@fortawesome/free-solid-svg-icons';
-import groundImg from '../assets/images/ground.svg';
-import bubblesImg from '../assets/images/bubbles.svg';
-import octopusImg from '../assets/images/octopus.svg';
-import { CONTACT_LINKS } from '../data';
+import groundImg from '../../assets/images/ground.svg';
+import bubblesImg from '../../assets/images/bubbles.svg';
+import octopusImg from '../../assets/images/octopus.svg';
+import { CONTACT_LINKS } from '../../data';
 
 const iconMap: any = {
   github: faGithub,
@@ -36,7 +36,7 @@ const ContactButton = ({ contact, delay }: { contact: any, delay: string }) => {
 
 export default function Contact() {
   return (
-    <div className="screen-section pb-12 relative text-gray-950 bg-white">
+    <div className="w-full flex items-center justify-center transition-all pb-12 relative text-gray-950 bg-white">
       <div id="contact" className="absolute top-0" />
       <Parallax
         speed={-20}
@@ -59,7 +59,7 @@ export default function Contact() {
         />
       </Parallax>
 
-      <div className="container text-center bg-white z-10 relative">
+      <div className="mx-auto px-4 text-center bg-white z-10 relative">
         <h1 className="text-2xl md:text-4xl font-black mb-8">Get In Touch</h1>
         <div className="flex flex-wrap justify-center gap-6">
           {CONTACT_LINKS.map((contact, index) => (
@@ -77,4 +77,5 @@ export default function Contact() {
     </div>
   );
 }
+
 
