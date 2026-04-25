@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import octopusSrc from '../../assets/images/octopus.svg';
 
@@ -50,7 +50,7 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
   const [cols, setCols] = useState<number[]>();
   const [hiddenKeys, setHiddenKeys] = useState<Record<string, boolean>>({});
   const [isEntering, setIsEntering] = useState(false);
-  const [scratchStarted, setScratchStarted] = useState(false);
+  const touchStartY = useRef<number | null>(null);
 
   useLayoutEffect(() => {
     setRows(createArray(nY));
@@ -62,16 +62,27 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
   }, [nX, nY]);
 
   const hideTile = useCallback((key: string) => {
-    if (!scratchStarted) setScratchStarted(true);
     setHiddenKeys((v) => ({ ...v, [key]: true }));
-  }, [scratchStarted]);
+  }, []);
 
   const handleEnter = () => {
-    setScratchStarted(true);
     setIsEntering(true);
     setTimeout(() => {
       onDone?.();
     }, 1000);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartY.current === null) return;
+    const deltaY = touchStartY.current - e.changedTouches[0].clientY;
+    if (Math.abs(deltaY) > 30 && !isEntering) {
+      handleEnter();
+    }
+    touchStartY.current = null;
   };
 
   const starDelays = useMemo(() => {
@@ -127,9 +138,10 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
         isEntering ? "opacity-0 pointer-events-none" : "opacity-100"
       )}
       onClick={handleEnter}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <div className="absolute inset-0 z-10 select-none overflow-hidden">{tiles}</div>
-
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center justify-center pointer-events-none w-full"
         style={{ opacity: contentOpacity, transition: 'opacity 0.4s ease-out' }}
@@ -142,7 +154,6 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
             className="absolute -right-[25%] md:-right-[20%] top-0 md:top-[10%] w-[30vw] md:w-[300px] animate-float-slow drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] z-40"
           />
         </h1>
-
         <p className="mt-8 md:mt-16 text-white font-medium tracking-[0.3em] md:tracking-[0.5em] uppercase text-[10px] md:text-sm">
           Scratch or tap anywhere to explore
         </p>

@@ -1,9 +1,79 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faDroplet } from '@fortawesome/free-solid-svg-icons';
 import jellyfishImg from '../../assets/images/jellyfish.svg';
 import MusicPlayer from '../ui/MusicPlayer';
+
+function DraggableImage() {
+  const imgRef = useRef<HTMLDivElement>(null);
+  const dragState = useRef({ dragging: false, startX: 0, startY: 0, origX: 0, origY: 0 });
+  const pos = useRef({ x: 0, y: 0 });
+
+  const start = (clientX: number, clientY: number) => {
+    const s = dragState.current;
+    s.dragging = true;
+    s.startX = clientX;
+    s.startY = clientY;
+    s.origX = pos.current.x;
+    s.origY = pos.current.y;
+    document.body.style.userSelect = 'none';
+    if (imgRef.current) imgRef.current.style.transition = 'none';
+  };
+
+  const move = (clientX: number, clientY: number) => {
+    const s = dragState.current;
+    if (!s.dragging || !imgRef.current) return;
+    pos.current.x = s.origX + (clientX - s.startX);
+    pos.current.y = s.origY + (clientY - s.startY);
+    imgRef.current.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px)`;
+  };
+
+  const end = () => {
+    dragState.current.dragging = false;
+    document.body.style.userSelect = '';
+    if (imgRef.current) {
+      imgRef.current.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      imgRef.current.style.transform = 'translate(0px, 0px)';
+      pos.current = { x: 0, y: 0 };
+    }
+  };
+
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => move(e.clientX, e.clientY);
+    const onTouchMove = (e: TouchEvent) => move(e.touches[0].clientX, e.touches[0].clientY);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', end);
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', end);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', end);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', end);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={imgRef}
+      onMouseDown={(e) => { e.preventDefault(); start(e.clientX, e.clientY); }}
+      onTouchStart={(e) => start(e.touches[0].clientX, e.touches[0].clientY)}
+      style={{ willChange: 'transform' }}
+      className="relative w-full aspect-square mb-10 group cursor-grab active:cursor-grabbing select-none z-20"
+    >
+      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-transparent rounded-full blur-3xl group-hover:opacity-60 transition-opacity pointer-events-none" />
+      <div className="absolute inset-0 bg-[#000814] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-inner">
+        <img
+          src="https://github.com/dev-himanshu-x.png"
+          alt="Himanshu Jaiswal"
+          draggable={false}
+          className="w-full h-full object-cover grayscale opacity-70 mix-blend-screen active:grayscale-0 active:opacity-100 hover:grayscale-0 hover:opacity-100 transition-all duration-1000 ease-in-out scale-110 group-hover:scale-100 group-active:scale-100"
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function Hero() {
   const [stats, setStats] = useState({ years: 0, projects: 0 });
@@ -30,16 +100,7 @@ export default function Hero() {
         <div className="flex flex-col xl:flex-row gap-12 xl:gap-20 items-center xl:items-stretch w-full">
 
           <div className="w-full max-w-[420px] bg-[#0a192f]/40 backdrop-blur-2xl rounded-[3rem] p-8 sm:p-12 flex flex-col relative shrink-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
-            <div className="relative w-full aspect-square mb-10 group">
-              <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-transparent rounded-full blur-3xl group-hover:opacity-60 transition-opacity" />
-              <div className="absolute inset-0 bg-[#000814] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-inner">
-                <img
-                  src="https://github.com/dev-himanshu-x.png"
-                  alt="Himanshu Jaiswal"
-                  className="w-full h-full object-cover grayscale opacity-70 mix-blend-screen hover:grayscale-0 hover:opacity-100 transition-all duration-1000 ease-in-out scale-110 group-hover:scale-100"
-                />
-              </div>
-            </div>
+            <DraggableImage />
 
             <h2 className="text-3xl sm:text-4xl font-black text-white text-center mb-4 tracking-tighter">Himanshu Jaiswal</h2>
 
@@ -69,8 +130,6 @@ export default function Hero() {
                 <FontAwesomeIcon icon={faXTwitter} className="text-lg sm:text-xl" />
               </a>
             </div>
-
-
           </div>
 
           <div className="flex-1 flex flex-col justify-center w-full lg:pl-10">

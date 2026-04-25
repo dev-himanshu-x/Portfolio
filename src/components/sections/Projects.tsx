@@ -5,7 +5,6 @@ import type { GitHubRepo } from '../../hooks/useGitHubProjects';
 
 const INITIAL_COUNT = 4;
 
-// Custom display order — repos listed here appear first in this order
 const REPO_ORDER = [
   'hospital-management-angularjs-bootstrap',
   'react-webrtc-peerjs-chat',
@@ -15,7 +14,7 @@ const REPO_ORDER = [
   'tanstack-dynamic-table',
   'react-tic-tac-toe',
   'tanstack-todo-typescript',
-  'react-antd-form', // User requested AntD Form be last
+  'react-antd-form',
 ];
 
 export default function Projects() {
@@ -37,21 +36,15 @@ export default function Projects() {
   return (
     <div className="w-full flex items-center justify-center transition-all relative bg-[#020c1b] text-white py-32 overflow-hidden">
       <div id="projects" className="absolute top-0" />
-
-      {/* Ambient glows */}
       <div className="absolute top-0 right-0 w-[50rem] h-[50rem] bg-cyan-900/10 rounded-full blur-[180px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-blue-900/10 rounded-full blur-[150px] pointer-events-none" />
-
       <div className="w-full mx-auto px-4 sm:px-8 lg:px-16 xl:px-24 relative z-10">
-
-        {/* Header */}
-        <div className="flex flex-col gap-8 mb-20 border-b border-white/5 pb-16">
+        <div className="flex flex-col gap-8 mb-8">
           <div className="space-y-6">
             <div className="flex items-center gap-4 text-cyan-400">
               <span className="w-12 h-px bg-cyan-400"></span>
               <span className="text-xs font-black uppercase tracking-[0.4em]">Projects</span>
             </div>
-
             <h1 className="text-5xl sm:text-8xl xl:text-9xl font-black tracking-tighter leading-[0.85] text-white">
               FEATURED<br />
               <span className="text-cyan-600/70">WORKS</span>
@@ -59,7 +52,6 @@ export default function Projects() {
           </div>
         </div>
 
-        {/* Loading State */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-32 gap-6 text-cyan-400/50">
             <Loader2 size={40} className="animate-spin" />
@@ -67,7 +59,6 @@ export default function Projects() {
           </div>
         )}
 
-        {/* Error State */}
         {error && !loading && (
           <div className="flex flex-col items-center justify-center py-24 gap-4 text-red-400/60">
             <AlertCircle size={32} />
@@ -76,7 +67,6 @@ export default function Projects() {
           </div>
         )}
 
-        {/* Project List */}
         {!loading && !error && (
           <>
             <div className="space-y-0">
@@ -84,8 +74,6 @@ export default function Projects() {
                 <ProjectCard key={repo.id} repo={repo} index={i} />
               ))}
             </div>
-
-            {/* Show More / Show Less */}
             {repos.length > INITIAL_COUNT && (
               <div className="mt-12 flex justify-center gap-4">
                 {hasMore ? (
@@ -109,7 +97,6 @@ export default function Projects() {
             )}
           </>
         )}
-
       </div>
     </div>
   );
@@ -120,32 +107,21 @@ function ProjectCard({ repo, index }: { repo: GitHubRepo; index: number }) {
 
   return (
     <div className="group relative border-t border-white/5 py-12 last:border-b last:border-white/5 transition-all duration-500 hover:border-cyan-500/20">
-
-      {/* Hover left accent bar */}
       <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-cyan-400 scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-top rounded-full" />
-
-      {/* Hover glow */}
       <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-start gap-8 pl-0 group-hover:pl-6 transition-all duration-500">
-
-        {/* Index */}
         <div className="hidden lg:flex w-16 shrink-0 pt-3">
           <span className="text-xs font-black text-cyan-500/20 tracking-[0.2em] tabular-nums group-hover:text-cyan-500/50 transition-colors duration-300">
             {String(index + 1).padStart(2, '0')}
           </span>
         </div>
-
-        {/* Main content */}
         <div className="flex-1 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
-              <h3 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight group-hover:text-cyan-50 transition-colors duration-300">
+              <h3 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight group-hover:text-cyan-50 transition-colors duration-300">
                 {repo.name.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
               </h3>
             </div>
-
-            {/* Action links */}
             <div className="flex items-center gap-3 shrink-0 pt-1">
               <a
                 href={repo.html_url}
@@ -168,14 +144,11 @@ function ProjectCard({ repo, index }: { repo: GitHubRepo; index: number }) {
               )}
             </div>
           </div>
-
           {repo.description && (
             <p className="text-lg text-cyan-100/45 leading-relaxed max-w-3xl font-medium">
               {repo.description}
             </p>
           )}
-
-          {/* Tech stack from topics */}
           {tech.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {tech.map((t, j) => (
@@ -189,7 +162,6 @@ function ProjectCard({ repo, index }: { repo: GitHubRepo; index: number }) {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );

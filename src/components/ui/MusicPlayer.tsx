@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faVolumeHigh, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
 
 const TRACK_URL = "/music.mp3";
-const TRACK_TITLE = "Lofi Chill";
 const START_TIME = 10;
 
 export default function MusicPlayer() {
@@ -18,7 +17,6 @@ export default function MusicPlayer() {
   const togglePlay = async () => {
     const audio = audioRef.current;
     if (!audio) return;
-
     if (isPlaying) {
       audio.pause();
       setIsPlaying(false);
@@ -68,7 +66,7 @@ export default function MusicPlayer() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-1 w-full max-w-[200px] mx-auto group">
+    <div className="flex flex-col items-center gap-1 w-full max-w-[200px] mx-auto">
       <audio
         ref={audioRef}
         src={TRACK_URL}
@@ -78,7 +76,6 @@ export default function MusicPlayer() {
         loop
         preload="metadata"
       />
-
       <div className="flex items-center gap-4 w-full">
         <button
           onClick={togglePlay}
@@ -87,7 +84,6 @@ export default function MusicPlayer() {
         >
           <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} className="text-xs" />
         </button>
-
         <div
           className="flex-1 h-[2px] bg-white/5 rounded-full cursor-pointer relative overflow-hidden"
           onClick={handleProgressClick}
@@ -97,7 +93,6 @@ export default function MusicPlayer() {
             style={{ width: `${progress}%` }}
           />
         </div>
-
         <button
           onClick={toggleMute}
           className="shrink-0 text-white/5 hover:text-cyan-400/30 transition-colors"
@@ -106,10 +101,9 @@ export default function MusicPlayer() {
           <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeHigh} className="text-[10px]" />
         </button>
       </div>
-
-      <span className="text-[8px] text-cyan-400/20 uppercase tracking-[0.2em]">
-        {error ?? TRACK_TITLE}
-      </span>
+      {error && (
+        <span className="text-[8px] text-red-400/40 uppercase tracking-[0.2em]">{error}</span>
+      )}
     </div>
   );
 }
