@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 ref_repo/
+.vercel
+.env*.local
