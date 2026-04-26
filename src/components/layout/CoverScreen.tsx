@@ -1,5 +1,12 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import octopusSrc from '../../assets/images/octopus.svg';
 
 const TILE_SIZE = 60;
@@ -88,8 +95,8 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
   const starDelays = useMemo(() => {
     if (!rows || !cols) return {};
     const delays: Record<string, string> = {};
-    rows.forEach(r => {
-      cols.forEach(c => {
+    rows.forEach((r) => {
+      cols.forEach((c) => {
         delays[`${r}.${c}`] = `${Math.random() * 5}s`;
       });
     });
@@ -109,14 +116,19 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
               onMouseEnter={() => hideTile(key)}
               onTouchMove={(e) => {
                 const touch = e.touches[0];
-                const el = document.elementFromPoint(touch.clientX, touch.clientY);
+                const el = document.elementFromPoint(
+                  touch.clientX,
+                  touch.clientY,
+                );
                 const tileKey = el?.getAttribute('data-key');
                 if (tileKey) hideTile(tileKey);
               }}
               data-key={key}
               className={classNames(
-                "w-[60px] min-w-[60px] h-[60px] transition-all duration-700 ease-out handcrafted-sky-tiles",
-                isHidden ? "opacity-0 pointer-events-none scale-0" : "opacity-100"
+                'w-[60px] min-w-[60px] h-[60px] transition-all duration-700 ease-out handcrafted-sky-tiles',
+                isHidden
+                  ? 'opacity-0 pointer-events-none scale-0'
+                  : 'opacity-100',
               )}
               style={{ animationDelay: starDelays[key] }}
             />
@@ -129,19 +141,22 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
   const scratchedCount = Object.keys(hiddenKeys).length;
   const totalTiles = nX * nY;
   const scratchRatio = totalTiles > 0 ? scratchedCount / totalTiles : 0;
-  const contentOpacity = Math.max(0, 1 - (scratchRatio * 5));
+  const contentOpacity = Math.max(0, 1 - scratchRatio * 5);
 
   return (
     <div
       className={classNames(
-        "fixed inset-0 z-[100] transition-opacity duration-1000 bg-transparent",
-        isEntering ? "opacity-0 pointer-events-none" : "opacity-100"
+        'fixed inset-0 z-[100] transition-opacity duration-1000 bg-transparent',
+        isEntering ? 'opacity-0 pointer-events-none' : 'opacity-100',
       )}
       onClick={handleEnter}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <div className="absolute inset-0 z-10 select-none overflow-hidden">{tiles}</div>
+      <div className="absolute inset-0 z-10 select-none overflow-hidden">
+        {tiles}
+      </div>
+
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center justify-center pointer-events-none w-full"
         style={{ opacity: contentOpacity, transition: 'opacity 0.4s ease-out' }}
@@ -154,7 +169,7 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
             className="absolute -right-[25%] md:-right-[20%] top-0 md:top-[10%] w-[30vw] md:w-[300px] animate-float-slow drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] z-40"
           />
         </h1>
-        <p className="mt-8 md:mt-16 text-white font-medium tracking-[0.3em] md:tracking-[0.5em] uppercase text-[10px] md:text-sm">
+        <p className="mt-8 md:mt-16 text-white font-medium tracking-[0.3em] md:tracking-[0.5em] uppercase text-[10px] md:text-sm animate-bounce">
           Scratch or tap anywhere to explore
         </p>
       </div>

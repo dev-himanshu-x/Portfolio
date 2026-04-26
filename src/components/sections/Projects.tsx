@@ -1,20 +1,45 @@
-import { Github, ArrowUpRight, ChevronDown, ChevronUp } from "lucide-react";
-import { useState, useMemo } from "react";
-import type { GitHubRepo } from "../../types/github";
-import repos from "../../data/repos.json";
+import { ArrowUpRight, ChevronDown, ChevronUp, Github } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
+import fallbackRepos from '../../data/repos.json';
+import { useGitHubProjects } from '../../hooks/useGitHubProjects';
+import type { GitHubRepo } from '../../types/github';
+
 const INITIAL_COUNT = 4;
 
 const REPO_ORDER = [
-  "MedSync",
-  "XeroTask",
-  "react-tic-tac-toe",
-  "PeerPulse",
-  "AutoTable",
-  "react-antd-form",
+  'MedSync',
+  'PeerPulse',
+  'BrightSync',
+  'react-vite-weather-app',
+  'XeroTask',
+  'Portfolio',
+  'AutoTable',
+  'TanTask',
+  'GridLock',
+  'react-antd-form',
 ];
 
 export default function Projects() {
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
+  const { repos: liveRepos, error } = useGitHubProjects();
+
+  useEffect(() => {
+    if (!error) return;
+
+    toast.error('Could not load latest GitHub projects', {
+      description: 'Showing last synced project data instead.',
+    });
+  }, [error]);
+
+  const repos = useMemo(() => {
+    if (liveRepos.length > 0) {
+      return liveRepos;
+    }
+
+    const data = fallbackRepos as any;
+    return (Array.isArray(data) ? data : data.repos || []) as GitHubRepo[];
+  }, [liveRepos]);
 
   const orderSet = useMemo(() => new Set(REPO_ORDER), []);
 
@@ -45,8 +70,8 @@ export default function Projects() {
       requestAnimationFrame(() => {
         const el = document.getElementById(`repo-${next - 4}`);
         el?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
+          behavior: 'smooth',
+          block: 'start',
         });
       });
 
@@ -55,7 +80,7 @@ export default function Projects() {
   };
 
   return (
-    <div className="w-full flex items-center justify-center transition-all relative bg-[#020c1b] text-white py-32 overflow-hidden">
+    <div className="w-full flex items-center justify-center transition-all relative bg-[#020c1b] text-white py-24 overflow-hidden">
       <div id="projects" className="absolute top-0" />
       <div className="absolute top-0 right-0 w-200 h-200 bg-cyan-900/10 rounded-full blur-[180px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-160 h-160 bg-blue-900/10 rounded-full blur-[150px] pointer-events-none" />
@@ -68,9 +93,8 @@ export default function Projects() {
                 Projects
               </span>
             </div>
-            <h1 className="text-5xl sm:text-8xl xl:text-9xl font-black tracking-tighter leading-[0.85] text-white">
-              FEATURED
-              <br />
+            <h1 className="text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter leading-none text-white flex flex-wrap gap-x-4 md:gap-x-8">
+              <span>FEATURED</span>
               <span className="text-cyan-600/70">WORKS</span>
             </h1>
           </div>
@@ -140,7 +164,7 @@ function ProjectCard({
       <div className="relative z-10 flex flex-col lg:flex-row lg:items-start gap-8 pl-0 group-hover:pl-6 transition-all duration-500">
         <div className="hidden lg:flex w-16 shrink-0 pt-3">
           <span className="text-xs font-black text-cyan-500/20 tracking-[0.2em] tabular-nums group-hover:text-cyan-500/50 transition-colors duration-300">
-            {String(index + 1).padStart(2, "0")}
+            {String(index + 1).padStart(2, '0')}
           </span>
         </div>
         <div className="flex-1 space-y-6">
@@ -148,7 +172,7 @@ function ProjectCard({
             <div>
               <h3 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight group-hover:text-cyan-50 transition-colors duration-300">
                 {repo.name
-                  .replace(/-/g, " ")
+                  .replace(/-/g, ' ')
                   .replace(/\b\w/g, (c) => c.toUpperCase())}
               </h3>
             </div>

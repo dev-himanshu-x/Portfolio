@@ -1,123 +1,65 @@
-# 🌊 Himanshu Jaiswal — Portfolio
+# Himanshu Jaiswal | Frontend Architect Portfolio
 
-A modern, immersive single-page portfolio built with React 19 and TypeScript. Features a scratchable welcome screen, lofi music player, parallax scrolling, and smooth animations throughout.
+An immersive, high-fidelity portfolio experience built with **React**, **TypeScript**, and **Tailwind CSS**. Inspired by deep-sea aesthetics, this project features custom motion, dynamic GitHub integration, and a sophisticated scratch-to-reveal entry experience.
 
-**Live:** [dev-himanshu-x.github.io](https://github.com/dev-himanshu-x) &nbsp;|&nbsp; **GitHub:** [@dev-himanshu-x](https://github.com/dev-himanshu-x)
+![Portfolio Preview](https://github.com/dev-himanshu-x.png)
 
----
+## 🌊 Core Experience
 
-## ✨ Features
+- **Immersive Entry:** Interactive "scratch-to-reveal" layer with floating jellyfish and bioluminescent effects.
+- **Dynamic Projects:** Seamless integration with GitHub API (synced via automated daily actions) to showcase real-time project data and README descriptions.
+- **Premium UI:** Glassmorphism, smooth parallax scrolling, and custom SVG animations for a "Deep Sea" atmosphere.
+- **Technical Arsenal:** A comprehensive look at my tech stack including React, Next.js, Three.js, GSAP, and more.
+- **Interactive Audio:** Minimalist snowfall-inspired background music player.
 
-- **Scratch-to-enter cover screen** — tile-based scratchcard animation on desktop (hover) and mobile (touch)
-- **Lofi music player** — ambient background music with progress bar, mute, and seek support
-- **GitHub stats** — live years of experience and project count fetched from the GitHub API
-- **Parallax scrolling** — depth-layered sections using `react-scroll-parallax`
-- **3D elements** — Three.js / React Three Fiber powered visuals
-- **Fully responsive** — mobile-first layout with Tailwind CSS v4
-- **Client-side routing** — TanStack Router with zero-config setup
-- **Floating UI tooltips** — accessible hover interactions via `@floating-ui/react`
+## 🛠️ Technical Stack
 
----
-
-## 🛠 Tech Stack
-
-| Category | Libraries |
-|---|---|
-| Framework | React 19, TypeScript 6 |
-| Build | Vite 8, Bun |
-| Styling | Tailwind CSS v4 |
-| Routing | TanStack Router |
-| Animation | Framer Motion, react-scroll-parallax |
-| 3D | Three.js, React Three Fiber, Drei |
-| Icons | FontAwesome (Solid + Brands) |
-| Utilities | classnames, clsx, lodash |
-
----
+- **Framework:** [React 19](https://react.dev/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Animation:** [GSAP](https://greensock.com/gsap/), [Framer Motion](https://www.framer.com/motion/), [React Scroll Parallax](https://www.npmjs.com/package/react-scroll-parallax)
+- **Tooling:** [Bun](https://bun.sh/), [Biome](https://biomejs.dev/) (Formatting & Linting)
+- **Icons:** [FontAwesome](https://fontawesome.com/), [Lucide React](https://lucide.dev/)
+- **Workflow:** GitHub Actions (for automated data syncing)
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ or [Bun](https://bun.sh)
+- [Bun](https://bun.sh/) (Recommended) or Node.js
 
-### Install & Run
+### Installation
 
-```bash
-# Clone the repo
-git clone https://github.com/dev-himanshu-x/portfolio.git
-cd portfolio
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/dev-himanshu-x/Portfolio.git
+   ```
 
-# Install dependencies
-bun install
-# or: npm install
+2. Install dependencies:
+   ```bash
+   bun install
+   ```
 
-# Start dev server
-bun run dev
-# or: npm run dev
-```
+3. Run the development server:
+   ```bash
+   bun run dev
+   ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+4. Format/Lint the code:
+   ```bash
+   bun run format
+   ```
 
-### Build for Production
+## 🤖 Automated Updates
 
-```bash
-bun run build
-# or: npm run build
-```
+This portfolio uses a custom GitHub Action (`deploy.yml`) that runs daily to:
+1. Fetch latest public repositories from GitHub.
+2. Enrich them with descriptions directly from their respective README files.
+3. Update `src/data/repos.json` to keep the site content fresh without manual edits.
 
-Output goes to the `dist/` folder.
+## 📄 License
 
-### Preview Production Build
-
-```bash
-bun run preview
-# or: npm run preview
-```
-
----
-
-## 🎵 Music Player Setup
-
-The lofi music player requires a local audio file. Add any `.mp3` to the public folder:
-
-```
-public/music.mp3
-```
-
-Free tracks with no attribution required: [pixabay.com/music](https://pixabay.com/music/)
+This project is open source. Feel free to use the code for your own portfolio, but please provide credit if you use the "Deep Sea" design elements!
 
 ---
 
-## 📁 Project Structure
-
-```
-src/
-├── assets/
-│   └── images/          # SVGs (jellyfish, octopus, etc.)
-├── components/
-│   ├── layout/
-│   │   ├── CoverScreen.tsx   # Scratchable welcome screen
-│   │   └── SideNav.tsx       # Fixed side navigation
-│   ├── sections/
-│   │   ├── Hero.tsx          # Landing section with profile card
-│   │   ├── About.tsx
-│   │   ├── Experience.tsx
-│   │   ├── Projects.tsx
-│   │   └── Contact.tsx
-│   └── ui/
-│       └── MusicPlayer.tsx   # Lofi audio player
-├── data.ts              # Projects, experience, contact data
-├── App.tsx              # Router setup
-└── main.tsx             # Entry point
-```
-
----
-
-## 📬 Contact
-
-| Platform | Link |
-|---|---|
-| GitHub | [github.com/dev-himanshu-x](https://github.com/dev-himanshu-x) |
-| LinkedIn | [linkedin.com/in/dev-himanshu-jaiswal](https://www.linkedin.com/in/dev-himanshu-jaiswal) |
-| X (Twitter) | [x.com/io_ohimanshu](https://x.com/io_ohimanshu) |
-| Email | iam.himanshu.x@gmail.com |
+**Crafted with ❤️ by [Himanshu Jaiswal](https://github.com/dev-himanshu-x)**

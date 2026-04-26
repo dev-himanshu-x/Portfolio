@@ -1,6 +1,6 @@
 import classNames from 'classnames';
+import { Briefcase, Code, Home, Mail, User } from 'lucide-react';
 import { useEffect } from 'react';
-import { Home, User, Briefcase, Code, Mail } from 'lucide-react';
 
 const iconMap: any = {
   Home: Home,
@@ -10,7 +10,15 @@ const iconMap: any = {
   Mail: Mail,
 };
 
-const MenuItem = ({ label, link, iconName }: { label: string, link: string, iconName: string }) => {
+const MenuItem = ({
+  label,
+  link,
+  iconName,
+}: {
+  label: string;
+  link: string;
+  iconName: string;
+}) => {
   const Icon = iconMap[iconName] || Home;
 
   return (
@@ -49,7 +57,6 @@ export default function SideNav() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Update NAV_ITEMS mapping or use inline if data.ts doesn't have icons
   const menuItems = [
     { label: 'Home', link: '#top', iconName: 'Home' },
     { label: 'About', link: '#about-me', iconName: 'User' },
@@ -65,14 +72,14 @@ export default function SideNav() {
         'top-2 left-1/2 -translate-x-1/2',
         'md:right-2 md:left-auto md:top-1/2 md:-translate-y-1/2 md:translate-x-0',
         'transition-colors',
-        'mix-blend-difference text-white bg-transparent'
+        'mix-blend-difference text-white bg-transparent',
       )}
     >
       <div
         className={classNames(
           'flex flex-row md:flex-col',
           'px-4 py-2 gap-4',
-          'md:px-2 md:py-4 md:gap-4'
+          'md:px-2 md:py-4 md:gap-4',
         )}
       >
         {menuItems.map((item, idx) => (
@@ -82,4 +89,3 @@ export default function SideNav() {
     </div>
   );
 }
-

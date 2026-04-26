@@ -1,43 +1,43 @@
-import fs from "fs";
+import fs from 'fs';
 
-const GITHUB_USERNAME = "dev-himanshu-x";
+const GITHUB_USERNAME = 'dev-himanshu-x';
 
 function truncate(text: string, max = 160) {
   if (text.length <= max) return text;
 
   const trimmed = text.slice(0, max);
-  const lastSpace = trimmed.lastIndexOf(" ");
+  const lastSpace = trimmed.lastIndexOf(' ');
 
-  return (lastSpace > 100 ? trimmed.slice(0, lastSpace) : trimmed).trimEnd() + "...";
+  return (
+    (lastSpace > 100 ? trimmed.slice(0, lastSpace) : trimmed).trimEnd() + '...'
+  );
 }
 
 function extractDescription(readme: string): string | null {
   const lines = readme
-    .split("\n")
+    .split('\n')
     .map((l) => l.trim())
     .filter(Boolean);
 
   let fallback: string | null = null;
 
   for (const line of lines) {
-    if (line.startsWith("#")) continue;
-    if (line.startsWith("![")) continue;
-    if (line.startsWith("<")) continue;
-    if (line.startsWith("---") || line.startsWith("===")) continue;
+    if (line.startsWith('#')) continue;
+    if (line.startsWith('![')) continue;
+    if (line.startsWith('<')) continue;
+    if (line.startsWith('---') || line.startsWith('===')) continue;
 
     const clean = line
-      .replace(/[*_`[\]()]/g, "")
-      .replace(/<[^>]*>/g, "")
+      .replace(/[*_`[\]()]/g, '')
+      .replace(/<[^>]*>/g, '')
       .trim();
 
     if (!clean) continue;
 
-    // prefer good length
     if (clean.length > 30) {
       return truncate(clean);
     }
 
-    // save shorter fallback if nothing better found
     if (!fallback && clean.length > 10) {
       fallback = clean;
     }
@@ -53,9 +53,9 @@ async function fetchReadme(repo: string, token: string) {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "application/vnd.github.raw+json",
+          Accept: 'application/vnd.github.raw+json',
         },
-      }
+      },
     );
 
     if (!res.ok) return null;
@@ -74,54 +74,57 @@ async function fetchRepos() {
     {
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github+json",
+        Accept: 'application/vnd.github+json',
       },
-    }
+    },
   );
 
   if (!res.ok) {
-    throw new Error("GitHub API failed");
+    throw new Error('GitHub API failed');
   }
 
   const data = await res.json();
-
   const filtered = data.filter((r: any) => !r.fork);
 
-  // only enrich top N repos (avoid rate limits)
-  const TOP_N = 6;
+  const TOP_N = 30;
 
   const enriched = await Promise.all(
     filtered.map(async (repo: any, i: number) => {
-      if (repo.description || i >= TOP_N) return repo;
+      if (i >= TOP_N) return repo;
 
       const readme = await fetchReadme(repo.name, token!);
       if (!readme) return repo;
 
       const desc = extractDescription(readme);
+      if (!desc) return repo;
 
       return {
         ...repo,
-        description: desc || repo.description,
+        description: desc,
       };
-    })
+    }),
   );
 
   const desiredOrder = [
-    "MedSync",
-    "PeerPulse",
-    "BrightSync",
-    "react-vite-weather-app",
-    "XeroTask",
-    "Portfolio",
-    "AutoTable",
-    "TanTask",
-    "react-tic-tac-toe",
-    "react-antd-form"
+    'MedSync',
+    'PeerPulse',
+    'BrightSync',
+    'react-vite-weather-app',
+    'XeroTask',
+    'Portfolio',
+    'AutoTable',
+    'TanTask',
+    'GridLock',
+    'react-antd-form',
   ];
 
   enriched.sort((a, b) => {
-    let indexA = desiredOrder.indexOf(a.name);
-    let indexB = desiredOrder.indexOf(b.name);
+    let indexA = desiredOrder.findIndex(
+      (name) => name.toLowerCase() === a.name.toLowerCase(),
+    );
+    let indexB = desiredOrder.findIndex(
+      (name) => name.toLowerCase() === b.name.toLowerCase(),
+    );
     if (indexA === -1) indexA = 999;
     if (indexB === -1) indexB = 999;
     return indexA - indexB;
@@ -131,14 +134,26 @@ async function fetchRepos() {
 }
 
 async function main() {
+  const token = process.env.GITHUB_TOKEN;
+  const userRes = await fetch(
+    `https://api.github.com/users/${GITHUB_USERNAME}`,
+    {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    },
+  );
+  const userData = await userRes.json();
+  const totalPublicRepos = userData.public_repos || 0;
+
   const repos = await fetchRepos();
 
-  fs.writeFileSync(
-    "./src/data/repos.json",
-    JSON.stringify(repos, null, 2)
-  );
+  const output = {
+    totalCount: totalPublicRepos,
+    repos: repos,
+  };
 
-  console.log("✅ repos with README descriptions updated");
+  fs.writeFileSync('./src/data/repos.json', JSON.stringify(output, null, 2));
+
+  console.log(`✅ ${totalPublicRepos} repos found, repos.json updated`);
 }
 
 main();

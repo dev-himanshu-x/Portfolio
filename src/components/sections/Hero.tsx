@@ -1,13 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faLinkedin, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import {
+  faGithub,
+  faLinkedin,
+  faXTwitter,
+} from '@fortawesome/free-brands-svg-icons';
 import { faDroplet } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useMemo, useRef } from 'react';
 import jellyfishImg from '../../assets/images/jellyfish.svg';
+import fallbackRepos from '../../data/repos.json';
 import MusicPlayer from '../ui/MusicPlayer';
 
 function DraggableImage() {
   const imgRef = useRef<HTMLDivElement>(null);
-  const dragState = useRef({ dragging: false, startX: 0, startY: 0, origX: 0, origY: 0 });
+  const dragState = useRef({
+    dragging: false,
+    startX: 0,
+    startY: 0,
+    origX: 0,
+    origY: 0,
+  });
   const pos = useRef({ x: 0, y: 0 });
 
   const start = (clientX: number, clientY: number) => {
@@ -33,34 +44,28 @@ function DraggableImage() {
     dragState.current.dragging = false;
     document.body.style.userSelect = '';
     if (imgRef.current) {
-      imgRef.current.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      imgRef.current.style.transition =
+        'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
       imgRef.current.style.transform = 'translate(0px, 0px)';
       pos.current = { x: 0, y: 0 };
     }
   };
 
-  useEffect(() => {
-    const onMouseMove = (e: MouseEvent) => move(e.clientX, e.clientY);
-    const onTouchMove = (e: TouchEvent) => move(e.touches[0].clientX, e.touches[0].clientY);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', end);
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
-    window.addEventListener('touchend', end);
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', end);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchend', end);
-    };
-  }, []);
-
   return (
     <div
       ref={imgRef}
-      onMouseDown={(e) => { e.preventDefault(); start(e.clientX, e.clientY); }}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        start(e.clientX, e.clientY);
+      }}
+      onMouseMove={(e) => move(e.clientX, e.clientY)}
+      onMouseUp={end}
+      onMouseLeave={end}
       onTouchStart={(e) => start(e.touches[0].clientX, e.touches[0].clientY)}
+      onTouchMove={(e) => move(e.touches[0].clientX, e.touches[0].clientY)}
+      onTouchEnd={end}
       style={{ willChange: 'transform' }}
-      className="relative w-full aspect-square mb-10 group cursor-grab active:cursor-grabbing select-none z-20"
+      className="relative w-full aspect-square mb-12 group cursor-grab active:cursor-grabbing select-none z-20"
     >
       <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-transparent rounded-full blur-3xl group-hover:opacity-60 transition-opacity pointer-events-none" />
       <div className="absolute inset-0 bg-[#000814] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-inner">
@@ -76,92 +81,140 @@ function DraggableImage() {
 }
 
 export default function Hero() {
-  const [stats, setStats] = useState({ years: 0, projects: 0 });
+  const stats = useMemo(() => {
+    const createdYear = 2025;
+    const currentYear = new Date().getFullYear();
+    const years = Math.max(1, currentYear - createdYear);
 
-  useEffect(() => {
-    fetch('https://api.github.com/users/dev-himanshu-x')
-      .then(res => res.json())
-      .then(data => {
-        const createdYear = new Date(data.created_at).getFullYear();
-        const currentYear = new Date().getFullYear();
-        setStats({
-          years: currentYear - createdYear || 3,
-          projects: data.public_repos || 1
-        });
-      })
-      .catch(() => setStats({ years: 3, projects: 1 }));
+    const data = fallbackRepos as any;
+    const projects =
+      data.totalCount || (Array.isArray(data) ? data.length : 12);
+
+    return { years, projects };
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#020c1b] text-white pt-20 pb-20 overflow-hidden relative">
+    <div className="min-h-screen bg-[#020c1b] text-white flex items-center py-10 overflow-hidden relative">
       <div id="top" className="absolute top-0" />
 
       <div className="w-full mx-auto px-4 sm:px-8 lg:px-16 xl:px-24 relative z-10">
         <div className="flex flex-col xl:flex-row gap-12 xl:gap-20 items-center xl:items-stretch w-full">
-
-          <div className="w-full max-w-[420px] bg-[#0a192f]/40 backdrop-blur-2xl rounded-[3rem] p-8 sm:p-12 flex flex-col relative shrink-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
+          <div className="w-full max-w-[450px] bg-[#0a192f]/40 backdrop-blur-2xl rounded-[3rem] p-10 sm:p-12 flex flex-col relative shrink-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
             <DraggableImage />
 
-            <h2 className="text-3xl sm:text-4xl font-black text-white text-center mb-4 tracking-tighter">Himanshu Jaiswal</h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-white text-center mb-4 tracking-tighter">
+              Himanshu Jaiswal
+            </h2>
 
             <div className="flex justify-center mb-6">
               <div className="px-5 py-2 bg-cyan-500/10 border border-cyan-400/20 rounded-full flex items-center gap-3 text-cyan-400 shadow-lg shadow-cyan-500/5">
-                <FontAwesomeIcon icon={faDroplet} className="animate-pulse text-xs" />
-                <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase">Frontend Architect</span>
+                <FontAwesomeIcon
+                  icon={faDroplet}
+                  className="animate-pulse text-xs"
+                />
+                <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase">
+                  Frontend Architect
+                </span>
               </div>
             </div>
 
-            <p className="text-cyan-100/50 text-center font-medium text-base sm:text-lg leading-relaxed mb-4">
-              Crafting immersive digital ecosystems with pixel-perfect precision.
+            <p className="text-cyan-100/50 text-center font-medium text-base sm:text-lg leading-relaxed mb-8">
+              Crafting immersive digital ecosystems with pixel-perfect
+              precision.
             </p>
 
-            <div className="mb-12">
+            <div className="mb-14">
               <MusicPlayer />
             </div>
 
-            <div className="flex justify-center gap-4 sm:gap-6 mb-12">
-              <a href="https://github.com/dev-himanshu-x" target="_blank" rel="noreferrer" className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 text-cyan-400 flex items-center justify-center hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300">
-                <FontAwesomeIcon icon={faGithub} className="text-lg sm:text-xl" />
+            <div className="flex justify-center gap-4 sm:gap-6">
+              <a
+                href="https://github.com/dev-himanshu-x"
+                target="_blank"
+                rel="noreferrer"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 text-cyan-400 flex items-center justify-center hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300"
+              >
+                <FontAwesomeIcon
+                  icon={faGithub}
+                  className="text-lg sm:text-xl"
+                />
               </a>
-              <a href="https://www.linkedin.com/in/dev-himanshu-jaiswal/" target="_blank" rel="noreferrer" className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 text-cyan-400 flex items-center justify-center hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300">
-                <FontAwesomeIcon icon={faLinkedin} className="text-lg sm:text-xl" />
+              <a
+                href="https://www.linkedin.com/in/dev-himanshu-jaiswal/"
+                target="_blank"
+                rel="noreferrer"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 text-cyan-400 flex items-center justify-center hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300"
+              >
+                <FontAwesomeIcon
+                  icon={faLinkedin}
+                  className="text-lg sm:text-xl"
+                />
               </a>
-              <a href="https://x.com/io_ohimanshu" target="_blank" rel="noreferrer" className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 text-cyan-400 flex items-center justify-center hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300">
-                <FontAwesomeIcon icon={faXTwitter} className="text-lg sm:text-xl" />
+              <a
+                href="https://x.com/io_ohimanshu"
+                target="_blank"
+                rel="noreferrer"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 text-cyan-400 flex items-center justify-center hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300"
+              >
+                <FontAwesomeIcon
+                  icon={faXTwitter}
+                  className="text-lg sm:text-xl"
+                />
               </a>
             </div>
           </div>
 
           <div className="flex-1 flex flex-col justify-center w-full lg:pl-10">
             <div className="mb-12 relative">
-              <div className="inline-block px-4 py-1 bg-cyan-500/20 rounded-lg text-cyan-400 text-[10px] sm:text-xs font-bold tracking-[0.3em] uppercase mb-6">Available for Work</div>
-              <h1 className="text-5xl sm:text-8xl lg:text-[9rem] font-black text-white leading-[0.85] tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">FRONTEND</h1>
-              <h1 className="text-5xl sm:text-8xl lg:text-[9rem] font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300/30 via-cyan-500/50 to-blue-900/10 leading-[0.85] tracking-tighter drop-shadow-[0_5px_15px_rgba(34,211,238,0.1)]">DEVELOPER</h1>
+              <div className="inline-block px-4 py-1 bg-cyan-500/20 rounded-lg text-cyan-400 text-[10px] sm:text-xs font-bold tracking-[0.3em] uppercase mb-6">
+                Available for Work
+              </div>
+              <h1 className="text-5xl sm:text-8xl lg:text-[9rem] font-black text-white leading-[0.85] tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                FRONTEND
+              </h1>
+              <h1 className="text-5xl sm:text-8xl lg:text-[9rem] font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300/30 via-cyan-500/50 to-blue-900/10 leading-[0.85] tracking-tighter drop-shadow-[0_5px_15px_rgba(34,211,238,0.1)]">
+                ARCHITECT
+              </h1>
             </div>
 
             <div className="flex flex-col md:flex-row items-center gap-8 mb-16 relative">
               <p className="text-cyan-100/30 text-lg sm:text-xl max-w-5xl font-medium leading-relaxed">
-                Turning complex requirements into fluid, responsive, and high-performance React applications. I specialize in scalable frontend architecture and modern web performance.
+                Turning complex requirements into fluid, responsive, and
+                high-performance React applications. I specialize in scalable
+                frontend architecture and modern web performance.
               </p>
               <div className="shrink-0 w-16 h-16 sm:w-28 sm:h-28 opacity-40 animate-float-slow pointer-events-none">
-                <img src={jellyfishImg} className="w-full h-full" alt="Jellyfish" />
+                <img
+                  src={jellyfishImg}
+                  className="w-full h-full"
+                  alt="Jellyfish"
+                />
               </div>
             </div>
 
             <div className="flex flex-row gap-8 sm:gap-20 items-center relative">
               <div className="relative z-10 group">
-                <div className="text-4xl sm:text-7xl font-black text-white mb-3 tabular-nums drop-shadow-lg">{stats.years}+</div>
-                <div className="text-cyan-500/40 text-[10px] sm:text-sm tracking-[0.2em] uppercase font-bold">YEARS OF<br className="hidden sm:block" /> EXPERIENCE</div>
+                <div className="text-4xl sm:text-7xl font-black text-white mb-3 tabular-nums drop-shadow-lg">
+                  {stats.years}+
+                </div>
+                <div className="text-cyan-500/40 text-[10px] sm:text-sm tracking-[0.2em] uppercase font-bold">
+                  YEARS OF
+                  <br className="hidden sm:block" /> EXPERIENCE
+                </div>
               </div>
               <div className="relative z-10 group flex items-center gap-6">
                 <div>
-                  <div className="text-4xl sm:text-7xl font-black text-white mb-3 tabular-nums drop-shadow-lg">{stats.projects}+</div>
-                  <div className="text-cyan-500/40 text-[10px] sm:text-sm tracking-[0.2em] uppercase font-bold">PROJECTS<br className="hidden sm:block" /> ON GITHUB</div>
+                  <div className="text-4xl sm:text-7xl font-black text-white mb-3 tabular-nums drop-shadow-lg">
+                    {stats.projects}+
+                  </div>
+                  <div className="text-cyan-500/40 text-[10px] sm:text-sm tracking-[0.2em] uppercase font-bold">
+                    PROJECTS
+                    <br className="hidden sm:block" /> ON GITHUB
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

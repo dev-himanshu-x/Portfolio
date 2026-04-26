@@ -1,9 +1,13 @@
-import { Parallax } from 'react-scroll-parallax';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faLinkedin, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import {
+  faGithub,
+  faLinkedin,
+  faXTwitter,
+} from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faFileAlt } from '@fortawesome/free-solid-svg-icons';
-import groundImg from '../../assets/images/ground.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Parallax } from 'react-scroll-parallax';
 import bubblesImg from '../../assets/images/bubbles.svg';
+import groundImg from '../../assets/images/ground.svg';
 import octopusImg from '../../assets/images/octopus.svg';
 import { CONTACT_LINKS } from '../../data';
 
@@ -15,7 +19,7 @@ const iconMap: any = {
   file: faFileAlt,
 };
 
-const ContactButton = ({ contact, delay }: { contact: any, delay: string }) => {
+const ContactButton = ({ contact, delay }: { contact: any; delay: string }) => {
   const icon = iconMap[contact.icon] || faFileAlt;
 
   return (
@@ -26,7 +30,10 @@ const ContactButton = ({ contact, delay }: { contact: any, delay: string }) => {
       className="block animate-bounce hover:scale-110 transition-transform duration-300 group relative"
       style={{ animationDelay: delay }}
     >
-      <FontAwesomeIcon icon={icon} className="text-4xl md:text-5xl text-gray-950" />
+      <FontAwesomeIcon
+        icon={icon}
+        className="text-4xl md:text-5xl text-gray-950"
+      />
       <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold whitespace-nowrap bg-black text-white px-2 py-1 rounded">
         {contact.label}
       </span>
@@ -36,13 +43,17 @@ const ContactButton = ({ contact, delay }: { contact: any, delay: string }) => {
 
 export default function Contact() {
   return (
-    <div className="w-full flex items-center justify-center transition-all pb-12 relative text-gray-950 bg-white">
+    <div className="w-full flex items-center justify-center transition-all py-24 relative text-gray-950 bg-white">
       <div id="contact" className="absolute top-0" />
       <Parallax
         speed={-20}
         className="absolute bottom-[calc(100%-180px)] md:bottom-[calc(100%-260px)] right-4 md:right-[10rem] xl:right-[20%]"
       >
-        <img src={octopusImg} className="w-[200px] md:w-[300px]" alt="Octopus" />
+        <img
+          src={octopusImg}
+          className="w-[200px] md:w-[300px]"
+          alt="Octopus"
+        />
       </Parallax>
       <Parallax speed={10} className="absolute bottom-full left-0 right-0">
         <img
@@ -77,5 +88,3 @@ export default function Contact() {
     </div>
   );
 }
-
-
