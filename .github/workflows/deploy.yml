@@ -22,7 +22,7 @@ jobs:
       - name: Fetch repos
         run: bun run scripts/fetchRepos.ts
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Commit changes
         run: |
