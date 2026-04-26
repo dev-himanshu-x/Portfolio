@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "fetch:repos": "bun run scripts/fetchRepos.ts",
+    "prebuild": "bun run fetch:repos",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -23,7 +25,9 @@
     "@vercel/analytics": "^2.0.1",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.4.2",
     "framer-motion": "^12.38.0",
+    "fs": "^0.0.1-security",
     "lodash": "^4.18.1",
     "lucide-react": "^0.475.0",
     "react": "^19.2.5",
