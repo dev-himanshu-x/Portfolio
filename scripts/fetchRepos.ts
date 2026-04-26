@@ -106,6 +106,27 @@ async function fetchRepos() {
     })
   );
 
+  const desiredOrder = [
+    "MedSync",
+    "PeerPulse",
+    "BrightSync",
+    "react-vite-weather-app",
+    "XeroTask",
+    "Portfolio",
+    "AutoTable",
+    "TanTask",
+    "react-tic-tac-toe",
+    "react-antd-form"
+  ];
+
+  enriched.sort((a, b) => {
+    let indexA = desiredOrder.indexOf(a.name);
+    let indexB = desiredOrder.indexOf(b.name);
+    if (indexA === -1) indexA = 999;
+    if (indexB === -1) indexB = 999;
+    return indexA - indexB;
+  });
+
   return enriched;
 }
 
