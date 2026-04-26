@@ -105,11 +105,11 @@ async function fetchRepos() {
     }),
   );
 
-  const desiredOrder = [
+  const REPO_ORDER = [
     'MedSync',
     'PeerPulse',
     'BrightSync',
-    'react-vite-weather-app',
+    'NeoCast',
     'XeroTask',
     'Portfolio',
     'AutoTable',
@@ -119,10 +119,10 @@ async function fetchRepos() {
   ];
 
   enriched.sort((a, b) => {
-    let indexA = desiredOrder.findIndex(
+    let indexA = REPO_ORDER.findIndex(
       (name) => name.toLowerCase() === a.name.toLowerCase(),
     );
-    let indexB = desiredOrder.findIndex(
+    let indexB = REPO_ORDER.findIndex(
       (name) => name.toLowerCase() === b.name.toLowerCase(),
     );
     if (indexA === -1) indexA = 999;

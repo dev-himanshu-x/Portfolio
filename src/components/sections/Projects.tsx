@@ -11,7 +11,7 @@ const REPO_ORDER = [
   'MedSync',
   'PeerPulse',
   'BrightSync',
-  'react-vite-weather-app',
+  'NeoCast',
   'XeroTask',
   'Portfolio',
   'AutoTable',

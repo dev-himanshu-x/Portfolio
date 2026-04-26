@@ -54,6 +54,24 @@ export const PROJECTS: ProjectItem[] = [
     tech: ['React', 'WebRTC', 'PeerJS', 'JavaScript'],
   },
   {
+    title: 'BrightSync',
+    year: 2026,
+    repoLink: 'https://github.com/dev-himanshu-x/BrightSync',
+    liveLink: 'https://bright-sync.vercel.app',
+    description:
+      'A role-based task management application with an interactive calendar interface.',
+    tech: ['React', 'TypeScript', 'Tailwind'],
+  },
+  {
+    title: 'NeoCast',
+    year: 2026,
+    repoLink: 'https://github.com/dev-himanshu-x/NeoCast',
+    liveLink: 'https://neocast-openmeteo.vercel.app/',
+    description:
+      'A neo-brutalist weather dashboard for Indian cities, built with React and Vite.',
+    tech: ['React', 'Vite', 'Weather API'],
+  },
+  {
     title: 'XeroTask',
     year: 2025,
     repoLink: 'https://github.com/dev-himanshu-x/XeroTask',
@@ -61,6 +79,23 @@ export const PROJECTS: ProjectItem[] = [
     description:
       'A polished todo manager with drag-and-drop organization and local persistence.',
     tech: ['React', 'Material UI', 'JavaScript'],
+  },
+  {
+    title: 'Portfolio',
+    year: 2026,
+    liveLink: '#top',
+    description:
+      'An immersive single-page portfolio with custom motion and high-performance frontend architecture.',
+    tech: ['React', 'TypeScript', 'Framer Motion', 'Biome'],
+  },
+  {
+    title: 'AutoTable',
+    year: 2026,
+    repoLink: 'https://github.com/dev-himanshu-x/AutoTable',
+    liveLink: 'https://autotable.vercel.app',
+    description:
+      'A sleek web app to view any JSON API data in a sortable, paginated table.',
+    tech: ['React', 'TypeScript', 'TanStack Table'],
   },
   {
     title: 'TanTask',
@@ -72,20 +107,20 @@ export const PROJECTS: ProjectItem[] = [
     tech: ['React', 'TanStack Table', 'TypeScript', 'Vite'],
   },
   {
+    title: 'GridLock',
+    year: 2026,
+    repoLink: 'https://github.com/dev-himanshu-x/GridLock',
+    liveLink: 'https://gridlock-tictac.vercel.app/',
+    description: 'A two-player Tic Tac Toe game built with React and Vite.',
+    tech: ['React', 'Vite', 'Game'],
+  },
+  {
     title: 'react-antd-form',
     year: 2026,
     repoLink: 'https://github.com/dev-himanshu-x/react-antd-form',
     description:
       'A dynamic form engine with validation, multi-step flows, and reusable field schemas.',
     tech: ['React', 'TypeScript', 'Ant Design', 'Vite'],
-  },
-  {
-    title: 'Portfolio',
-    year: 2026,
-    liveLink: '#top',
-    description:
-      'An immersive single-page portfolio with custom motion and high-performance frontend architecture.',
-    tech: ['React', 'TypeScript', 'Framer Motion', 'Biome'],
   },
 ];
 
