@@ -3,6 +3,7 @@ name: Update GitHub Repos
 on:
   schedule:
     - cron: "30 18 * * *" # 12 AM IST (UTC+5:30)
+  workflow_dispatch:
 
 permissions:
   contents: write
