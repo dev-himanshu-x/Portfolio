@@ -164,7 +164,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col justify-center w-full lg:pl-10">
+          <div className="flex-1 flex flex-col justify-center w-full lg:pl-2">
             <div className="mb-12 relative">
               <div className="inline-block px-4 py-1 bg-cyan-500/20 rounded-lg text-cyan-400 text-[10px] sm:text-xs font-bold tracking-[0.3em] uppercase mb-6">
                 Available for Work

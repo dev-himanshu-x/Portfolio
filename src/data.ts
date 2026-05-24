@@ -22,14 +22,14 @@ export interface ContactItem {
 
 export const EXPERIENCE: CareerItem[] = [
   {
-    role: 'Frontend Developer',
-    company: 'Self Employed',
-    period: '2024 — PRESENT',
+    role: 'Frontend Developer (Intern)',
+    company: 'TEAM ERP',
+    period: 'Sep 2025 — PRESENT',
     points: [
-      'Architecting high-performance, scalable web applications with a focus on robust frontend infrastructure.',
-      'Specializing in complex state management, React Server Components, and advanced rendering patterns.',
-      'Bridging the gap between technical requirements and seamless user interactions.',
-      'Researching next-gen web technologies and performance-first frontend architectures.',
+      'Building responsive, accessible user interfaces using React and TypeScript.',
+      'Delivering user-facing features and reusable UI components that improve product velocity.',
+      'Partnering with product and backend teams to integrate REST APIs and optimize performance.',
+      'Improving layout responsiveness and accessibility across the application.',
     ],
   },
 ];

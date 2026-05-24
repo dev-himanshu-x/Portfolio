@@ -169,7 +169,7 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
             className="absolute -right-[25%] md:-right-[20%] top-0 md:top-[10%] w-[30vw] md:w-[300px] animate-float-slow drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] z-40"
           />
         </h1>
-        <p className="mt-8 md:mt-16 text-white font-medium tracking-[0.3em] md:tracking-[0.5em] uppercase text-[10px] md:text-sm animate-bounce">
+        <p className="mt-8 md:mt-16 text-white font-medium tracking-[0.3em] md:tracking-[0.5em] uppercase text-[14px] md:text-lg animate-bounce">
           Scratch or tap anywhere to explore
         </p>
       </div>
