@@ -1,6 +1,13 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 const GITHUB_USERNAME = 'dev-himanshu-x';
+
+interface RawRepo {
+  name: string;
+  fork: boolean;
+  description: string | null;
+  [key: string]: unknown;
+}
 
 function truncate(text: string, max = 160) {
   if (text.length <= max) return text;
@@ -8,9 +15,7 @@ function truncate(text: string, max = 160) {
   const trimmed = text.slice(0, max);
   const lastSpace = trimmed.lastIndexOf(' ');
 
-  return (
-    (lastSpace > 100 ? trimmed.slice(0, lastSpace) : trimmed).trimEnd() + '...'
-  );
+  return `${(lastSpace > 100 ? trimmed.slice(0, lastSpace) : trimmed).trimEnd()}...`;
 }
 
 function extractDescription(readme: string): string | null {
@@ -66,9 +71,7 @@ async function fetchReadme(repo: string, token: string) {
   }
 }
 
-async function fetchRepos() {
-  const token = process.env.GITHUB_TOKEN;
-
+async function fetchRepos(token: string) {
   const res = await fetch(
     `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=pushed&direction=desc`,
     {
@@ -83,16 +86,16 @@ async function fetchRepos() {
     throw new Error('GitHub API failed');
   }
 
-  const data = await res.json();
-  const filtered = data.filter((r: any) => !r.fork);
+  const data = (await res.json()) as RawRepo[];
+  const filtered = data.filter((r) => !r.fork);
 
   const TOP_N = 30;
 
   const enriched = await Promise.all(
-    filtered.map(async (repo: any, i: number) => {
+    filtered.map(async (repo, i) => {
       if (i >= TOP_N) return repo;
 
-      const readme = await fetchReadme(repo.name, token!);
+      const readme = await fetchReadme(repo.name, token);
       if (!readme) return repo;
 
       const desc = extractDescription(readme);
@@ -168,7 +171,7 @@ async function main() {
 
     console.log(`📦 Found ${totalPublicRepos} public repositories.`);
 
-    const repos = await fetchRepos();
+    const repos = await fetchRepos(token);
 
     const output = {
       totalCount: totalPublicRepos,

@@ -1,3 +1,4 @@
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import {
   faGithub,
   faLinkedin,
@@ -9,9 +10,11 @@ import { Parallax } from 'react-scroll-parallax';
 import bubblesImg from '../../assets/images/bubbles.svg';
 import groundImg from '../../assets/images/ground.svg';
 import octopusImg from '../../assets/images/octopus.svg';
-import { CONTACT_LINKS } from '../../data';
+import { CONTACT_LINKS, type ContactItem } from '../../data';
+import FadeInImage from '../ui/FadeInImage';
+import Reveal from '../ui/Reveal';
 
-const iconMap: any = {
+const iconMap: Record<ContactItem['icon'], IconDefinition> = {
   github: faGithub,
   linkedin: faLinkedin,
   twitter: faXTwitter,
@@ -19,7 +22,13 @@ const iconMap: any = {
   file: faFileAlt,
 };
 
-const ContactButton = ({ contact, delay }: { contact: any; delay: string }) => {
+const ContactButton = ({
+  contact,
+  delay,
+}: {
+  contact: ContactItem;
+  delay: string;
+}) => {
   const icon = iconMap[contact.icon] || faFileAlt;
 
   return (
@@ -49,38 +58,46 @@ export default function Contact() {
         speed={-20}
         className="absolute bottom-[calc(100%-180px)] md:bottom-[calc(100%-260px)] right-4 md:right-[10rem] xl:right-[20%]"
       >
-        <img
+        <FadeInImage
           src={octopusImg}
           className="w-[200px] md:w-[300px]"
           alt="Octopus"
+          loading="lazy"
+          decoding="async"
         />
       </Parallax>
       <Parallax speed={10} className="absolute bottom-full left-0 right-0">
-        <img
+        <FadeInImage
           src={bubblesImg}
           className="w-full min-h-[100px] md:min-h-[150px] object-cover object-top"
           alt="Bubbles"
+          loading="lazy"
+          decoding="async"
         />
       </Parallax>
       <Parallax speed={0} className="absolute bottom-full left-0 right-0">
-        <img
+        <FadeInImage
           src={groundImg}
+          loading="lazy"
+          decoding="async"
           className="w-full min-h-[120px] md:min-h-[180px] object-cover object-[left_bottom]"
           alt="Ground"
         />
       </Parallax>
 
       <div className="mx-auto px-4 text-center bg-white z-10 relative">
-        <h1 className="text-2xl md:text-4xl font-black mb-8">Get In Touch</h1>
-        <div className="flex flex-wrap justify-center gap-6">
-          {CONTACT_LINKS.map((contact, index) => (
-            <ContactButton
-              key={contact.label}
-              contact={contact}
-              delay={`${((index + 1) / 2) * 1000}ms`}
-            />
-          ))}
-        </div>
+        <Reveal>
+          <h1 className="text-2xl md:text-4xl font-black mb-8">Get In Touch</h1>
+          <div className="flex flex-wrap justify-center gap-6">
+            {CONTACT_LINKS.map((contact, index) => (
+              <ContactButton
+                key={contact.label}
+                contact={contact}
+                delay={`${((index + 1) / 2) * 1000}ms`}
+              />
+            ))}
+          </div>
+        </Reveal>
         <div className="text-sm font-semibold opacity-60 w-full mt-20 pb-8 tracking-wide">
           Made with ❤️ by Himanshu Jaiswal
         </div>

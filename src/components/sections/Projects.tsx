@@ -1,74 +1,70 @@
+import { motion } from 'framer-motion';
 import { ArrowUpRight, ChevronDown, ChevronUp, Github } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import { toast } from 'sonner';
-import fallbackRepos from '../../data/repos.json';
+import { useMemo, useState } from 'react';
 import { useGitHubProjects } from '../../hooks/useGitHubProjects';
 import type { GitHubRepo } from '../../types/github';
+import Reveal from '../ui/Reveal';
 
-const INITIAL_COUNT = 4;
+const SHOW_MORE_STEP = 8;
 
-const REPO_ORDER = [
-  'MedSync',
-  'PeerPulse',
-  'BrightSync',
-  'NeoCast',
-  'XeroTask',
+const INITIAL_COUNT = 8;
+
+// Curated by scope/polish, most impressive first. Portfolio is deliberately
+// kept out of the top spot (it's this site itself, not a "project" to lead
+// with). Repos not listed here fall back to most-recently-updated.
+// Live-vs-not-live is applied on top of this order, so a not-live repo
+// never outranks a live one.
+const FEATURED_ORDER = [
+  'MedSync-Hms',
+  'BrightSync-HR',
+  'PeerPulse-Chatapp',
+  'Sicuaura-Ecommerce',
+  'Trivexa-stockmarket',
+  'Sfridoo-Recycle',
   'Portfolio',
   'AutoTable',
-  'TanTask',
-  'GridLock',
-  'react-antd-form',
+  'TanTask-Todo',
+  'XeroTask-Todo',
+  'NeoCast-Weather',
+  'Tic-Tac-Toe',
 ];
 
 export default function Projects() {
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
-  const { repos: liveRepos, error } = useGitHubProjects();
+  const { repos } = useGitHubProjects();
 
-  useEffect(() => {
-    if (!error) return;
+  const orderSet = useMemo(() => new Set(FEATURED_ORDER), []);
 
-    toast.error('Could not load latest GitHub projects', {
-      description: 'Showing last synced project data instead.',
-    });
-  }, [error]);
+  const rankedRepos = useMemo(() => {
+    const featured = FEATURED_ORDER.map((name) =>
+      repos.find((r) => r.name === name),
+    ).filter(Boolean) as GitHubRepo[];
 
-  const repos = useMemo(() => {
-    if (liveRepos.length > 0) {
-      return liveRepos;
-    }
-
-    const data = fallbackRepos as any;
-    return (Array.isArray(data) ? data : data.repos || []) as GitHubRepo[];
-  }, [liveRepos]);
-
-  const orderSet = useMemo(() => new Set(REPO_ORDER), []);
-
-  const orderedRepos = useMemo(() => {
-    return REPO_ORDER.map((name) => repos.find((r) => r.name === name)).filter(
-      Boolean,
-    ) as GitHubRepo[];
-  }, [repos]);
-
-  const otherRepos = useMemo(() => {
-    return repos
+    const rest = repos
       .filter((r) => !orderSet.has(r.name))
       .sort(
         (a, b) =>
           new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime(),
       );
+
+    return [...featured, ...rest];
   }, [repos, orderSet]);
 
-  const combined = [...orderedRepos, ...otherRepos];
+  const combined = useMemo(() => {
+    const live = rankedRepos.filter((r) => !!r.homepage);
+    const notLive = rankedRepos.filter((r) => !r.homepage);
+    return [...live, ...notLive];
+  }, [rankedRepos]);
 
   const visible = combined.slice(0, visibleCount);
   const hasMore = visibleCount < combined.length;
 
   const handleShowMore = () => {
     setVisibleCount((prev) => {
-      const next = Math.min(prev + 4, combined.length);
+      const next = Math.min(prev + SHOW_MORE_STEP, combined.length);
 
       requestAnimationFrame(() => {
-        const el = document.getElementById(`repo-${next - 4}`);
+        const el = document.getElementById(`repo-${prev}`);
         el?.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
@@ -86,7 +82,7 @@ export default function Projects() {
       <div className="absolute bottom-0 left-0 w-160 h-160 bg-blue-900/10 rounded-full blur-[150px] pointer-events-none" />
       <div className="w-full mx-auto px-4 sm:px-8 lg:px-16 xl:px-24 relative z-10">
         <div className="flex flex-col gap-8 mb-8">
-          <div className="space-y-6">
+          <Reveal className="space-y-6">
             <div className="flex items-center gap-4 text-cyan-400">
               <span className="w-12 h-px bg-cyan-400"></span>
               <span className="text-xs font-black uppercase tracking-[0.4em]">
@@ -97,47 +93,55 @@ export default function Projects() {
               <span>FEATURED</span>
               <span className="text-cyan-600/70">WORKS</span>
             </h1>
-          </div>
+          </Reveal>
         </div>
-        <>
-          <div className="space-y-0">
-            {visible.map((repo, i) => (
-              <ProjectCard
-                key={repo.id}
-                repo={repo}
-                index={i}
-                id={`repo-${i}`}
-              />
-            ))}
+        <div className="space-y-0">
+          {visible.map((repo, i) => (
+            <motion.div
+              key={repo.id}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                duration: 0.5,
+                delay: (i % SHOW_MORE_STEP) * 0.06,
+                ease: 'easeOut',
+              }}
+            >
+              <ProjectCard repo={repo} index={i} id={`repo-${i}`} />
+            </motion.div>
+          ))}
+        </div>
+        {combined.length > INITIAL_COUNT && (
+          <div className="mt-12 flex justify-center gap-4">
+            {hasMore ? (
+              <button
+                type="button"
+                onClick={handleShowMore}
+                className="group flex items-center gap-3 px-8 py-4 border border-cyan-800/40 rounded-2xl text-sm font-black uppercase tracking-widest text-cyan-400/70 hover:border-cyan-400 hover:text-white hover:bg-cyan-950/40 transition-all duration-300"
+              >
+                <ChevronDown
+                  size={16}
+                  className="group-hover:translate-y-0.5 transition-transform"
+                />
+                Show More (
+                {Math.min(SHOW_MORE_STEP, combined.length - visibleCount)} more)
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setVisibleCount(INITIAL_COUNT)}
+                className="group flex items-center gap-3 px-8 py-4 border border-cyan-800/40 rounded-2xl text-sm font-black uppercase tracking-widest text-cyan-400/70 hover:border-cyan-400 hover:text-white hover:bg-cyan-950/40 transition-all duration-300"
+              >
+                <ChevronUp
+                  size={16}
+                  className="group-hover:-translate-y-0.5 transition-transform"
+                />
+                Show Less
+              </button>
+            )}
           </div>
-          {combined.length > INITIAL_COUNT && (
-            <div className="mt-12 flex justify-center gap-4">
-              {hasMore ? (
-                <button
-                  onClick={handleShowMore}
-                  className="group flex items-center gap-3 px-8 py-4 border border-cyan-800/40 rounded-2xl text-sm font-black uppercase tracking-widest text-cyan-400/70 hover:border-cyan-400 hover:text-white hover:bg-cyan-950/40 transition-all duration-300"
-                >
-                  <ChevronDown
-                    size={16}
-                    className="group-hover:translate-y-0.5 transition-transform"
-                  />
-                  Show More ({Math.min(4, combined.length - visibleCount)} more)
-                </button>
-              ) : (
-                <button
-                  onClick={() => setVisibleCount(INITIAL_COUNT)}
-                  className="group flex items-center gap-3 px-8 py-4 border border-cyan-800/40 rounded-2xl text-sm font-black uppercase tracking-widest text-cyan-400/70 hover:border-cyan-400 hover:text-white hover:bg-cyan-950/40 transition-all duration-300"
-                >
-                  <ChevronUp
-                    size={16}
-                    className="group-hover:-translate-y-0.5 transition-transform"
-                  />
-                  Show Less
-                </button>
-              )}
-            </div>
-          )}
-        </>
+        )}
       </div>
     </div>
   );
@@ -205,9 +209,9 @@ function ProjectCard({
           )}
           {tech.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {tech.map((t, j) => (
+              {tech.map((t) => (
                 <span
-                  key={j}
+                  key={t}
                   className="px-3 py-1 border border-white/6 rounded text-xs font-bold text-cyan-200/35 group-hover:text-cyan-300/60 group-hover:border-cyan-800/50 transition-all duration-300"
                 >
                   {t}

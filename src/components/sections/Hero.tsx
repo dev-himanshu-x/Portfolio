@@ -3,14 +3,16 @@ import {
   faLinkedin,
   faXTwitter,
 } from '@fortawesome/free-brands-svg-icons';
-import { faDroplet } from '@fortawesome/free-solid-svg-icons';
+import { faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import jellyfishImg from '../../assets/images/jellyfish.svg';
-import fallbackRepos from '../../data/repos.json';
+import { useGitHubProjects } from '../../hooks/useGitHubProjects';
 import MusicPlayer from '../ui/MusicPlayer';
+import Reveal from '../ui/Reveal';
 
 function DraggableImage() {
+  const [avatarLoaded, setAvatarLoaded] = useState(false);
   const imgRef = useRef<HTMLDivElement>(null);
   const dragState = useRef({
     dragging: false,
@@ -52,6 +54,7 @@ function DraggableImage() {
   };
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: purely decorative drag-to-wobble gesture, no semantic action or keyboard equivalent
     <div
       ref={imgRef}
       onMouseDown={(e) => {
@@ -69,11 +72,17 @@ function DraggableImage() {
     >
       <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-transparent rounded-full blur-3xl group-hover:opacity-60 transition-opacity pointer-events-none" />
       <div className="absolute inset-0 bg-[#000814] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-inner">
+        {!avatarLoaded && (
+          <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-cyan-500/10 via-cyan-400/5 to-transparent" />
+        )}
         <img
           src="https://github.com/dev-himanshu-x.png"
           alt="Himanshu Jaiswal"
           draggable={false}
-          className="w-full h-full object-cover grayscale opacity-70 mix-blend-screen active:grayscale-0 active:opacity-100 hover:grayscale-0 hover:opacity-100 transition-all duration-1000 ease-in-out scale-110 group-hover:scale-100 group-active:scale-100"
+          onLoad={() => setAvatarLoaded(true)}
+          className={`w-full h-full object-cover grayscale mix-blend-screen active:grayscale-0 active:opacity-100 hover:grayscale-0 hover:opacity-100 transition-all duration-1000 ease-in-out scale-110 group-hover:scale-100 group-active:scale-100 ${
+            avatarLoaded ? 'opacity-70' : 'opacity-0'
+          }`}
         />
       </div>
     </div>
@@ -81,47 +90,35 @@ function DraggableImage() {
 }
 
 export default function Hero() {
+  const { repos } = useGitHubProjects();
+
   const stats = useMemo(() => {
     const createdYear = 2025;
     const currentYear = new Date().getFullYear();
     const years = Math.max(1, currentYear - createdYear);
-
-    const data = fallbackRepos as any;
-    const projects =
-      data.totalCount || (Array.isArray(data) ? data.length : 12);
+    const projects = repos.length || 12;
 
     return { years, projects };
-  }, []);
+  }, [repos]);
 
   return (
-    <div className="min-h-screen bg-[#020c1b] text-white flex items-center py-10 overflow-hidden relative">
+    <div className="min-h-screen bg-[#020c1b] text-white flex items-center pt-24 pb-10 md:py-10 overflow-hidden relative">
       <div id="top" className="absolute top-0" />
 
       <div className="w-full mx-auto px-4 sm:px-8 lg:px-16 xl:px-24 relative z-10">
-        <div className="flex flex-col xl:flex-row gap-12 xl:gap-20 items-center xl:items-stretch w-full">
+        <div className="flex flex-col xl:flex-row gap-12 xl:gap-10 items-center xl:items-stretch w-full">
           <div className="w-full max-w-[450px] bg-[#0a192f]/40 backdrop-blur-2xl rounded-[3rem] p-10 sm:p-12 flex flex-col relative shrink-0 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
             <DraggableImage />
 
-            <h2 className="text-3xl sm:text-4xl font-black text-white text-center mb-4 tracking-tighter">
-              Himanshu Jaiswal
-            </h2>
+            <Reveal>
+              <h2 className="text-3xl sm:text-4xl font-black text-white text-center mb-4 tracking-tighter">
+                Himanshu Jaiswal
+              </h2>
 
-            <div className="flex justify-center mb-6">
-              <div className="px-5 py-2 bg-cyan-500/10 border border-cyan-400/20 rounded-full flex items-center gap-3 text-cyan-400 shadow-lg shadow-cyan-500/5">
-                <FontAwesomeIcon
-                  icon={faDroplet}
-                  className="animate-pulse text-xs"
-                />
-                <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase">
-                  Frontend Architect
-                </span>
-              </div>
-            </div>
-
-            <p className="text-cyan-100/50 text-center font-medium text-base sm:text-lg leading-relaxed mb-8">
-              Crafting immersive digital ecosystems with pixel-perfect
-              precision.
-            </p>
+              <p className="text-cyan-100/50 text-center font-medium text-base sm:text-lg leading-relaxed mb-8">
+                Building fast, accessible interfaces with React and TypeScript.
+              </p>
+            </Reveal>
 
             <div className="mb-14">
               <MusicPlayer />
@@ -161,27 +158,39 @@ export default function Hero() {
                   className="text-lg sm:text-xl"
                 />
               </a>
+              <a
+                href="/Himanshu_Jaiswal_Resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Resume"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 text-cyan-400 flex items-center justify-center hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300"
+              >
+                <FontAwesomeIcon
+                  icon={faFileArrowDown}
+                  className="text-lg sm:text-xl"
+                />
+              </a>
             </div>
           </div>
 
           <div className="flex-1 flex flex-col justify-center w-full lg:pl-2">
-            <div className="mb-12 relative">
-              <div className="inline-block px-4 py-1 bg-cyan-500/20 rounded-lg text-cyan-400 text-[10px] sm:text-xs font-bold tracking-[0.3em] uppercase mb-6">
-                Available for Work
-              </div>
-              <h1 className="text-5xl sm:text-8xl lg:text-[9rem] font-black text-white leading-[0.85] tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-                FRONTEND
+            <Reveal delay={0.1} className="mb-12 relative">
+              <h1 className="text-5xl sm:text-8xl lg:text-[9rem] font-black text-white leading-[0.85] tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] whitespace-nowrap">
+                FULL STACK
               </h1>
               <h1 className="text-5xl sm:text-8xl lg:text-[9rem] font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300/30 via-cyan-500/50 to-blue-900/10 leading-[0.85] tracking-tighter drop-shadow-[0_5px_15px_rgba(34,211,238,0.1)]">
-                ARCHITECT
+                DEVELOPER
               </h1>
-            </div>
+            </Reveal>
 
-            <div className="flex flex-col md:flex-row items-center gap-8 mb-16 relative">
+            <Reveal
+              delay={0.2}
+              className="flex flex-col md:flex-row items-center gap-8 mb-16 relative"
+            >
               <p className="text-cyan-100/30 text-lg sm:text-xl max-w-5xl font-medium leading-relaxed">
-                Turning complex requirements into fluid, responsive, and
-                high-performance React applications. I specialize in scalable
-                frontend architecture and modern web performance.
+                I turn complex requirements into fast, accessible React and
+                TypeScript applications, from dynamic data tables to real-time
+                dashboards.
               </p>
               <div className="shrink-0 w-16 h-16 sm:w-28 sm:h-28 opacity-40 animate-float-slow pointer-events-none">
                 <img
@@ -190,9 +199,12 @@ export default function Hero() {
                   alt="Jellyfish"
                 />
               </div>
-            </div>
+            </Reveal>
 
-            <div className="flex flex-row gap-8 sm:gap-20 items-center relative">
+            <Reveal
+              delay={0.3}
+              className="flex flex-row gap-8 sm:gap-20 items-center relative"
+            >
               <div className="relative z-10 group">
                 <div className="text-4xl sm:text-7xl font-black text-white mb-3 tabular-nums drop-shadow-lg">
                   {stats.years}+
@@ -213,7 +225,7 @@ export default function Hero() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </div>

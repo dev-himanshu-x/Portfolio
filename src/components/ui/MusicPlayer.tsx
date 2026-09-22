@@ -51,16 +51,35 @@ export default function MusicPlayer() {
 
   const handleTimeUpdate = () => {
     const audio = audioRef.current;
-    if (audio && audio.duration) {
+    if (audio?.duration) {
       setProgress((audio.currentTime / audio.duration) * 100);
     }
   };
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const audio = audioRef.current;
-    if (!audio || !audio.duration) return;
+    if (!audio?.duration) return;
     const rect = e.currentTarget.getBoundingClientRect();
     audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  };
+
+  const seekBy = (seconds: number) => {
+    const audio = audioRef.current;
+    if (!audio?.duration) return;
+    audio.currentTime = Math.min(
+      Math.max(audio.currentTime + seconds, 0),
+      audio.duration,
+    );
+  };
+
+  const handleProgressKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      seekBy(-5);
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      seekBy(5);
+    }
   };
 
   const handleError = () => {
@@ -72,6 +91,7 @@ export default function MusicPlayer() {
 
   return (
     <div className="flex flex-col items-center gap-2 w-full max-w-[240px] mx-auto">
+      {/* biome-ignore lint/a11y/useMediaCaption: instrumental background track, no dialogue to caption */}
       <audio
         ref={audioRef}
         src={TRACK_URL}
@@ -83,6 +103,7 @@ export default function MusicPlayer() {
       />
       <div className="flex items-center gap-5 w-full">
         <button
+          type="button"
           onClick={togglePlay}
           className={`shrink-0 transition-all duration-300 ${
             isPlaying
@@ -99,6 +120,13 @@ export default function MusicPlayer() {
         <div
           className="flex-1 h-[3px] bg-white/10 rounded-full cursor-pointer relative overflow-hidden group/progress"
           onClick={handleProgressClick}
+          onKeyDown={handleProgressKeyDown}
+          role="slider"
+          tabIndex={0}
+          aria-label="Seek"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(progress)}
         >
           <div
             className={`h-full transition-all duration-150 ${
@@ -110,6 +138,7 @@ export default function MusicPlayer() {
           />
         </div>
         <button
+          type="button"
           onClick={toggleMute}
           className="shrink-0 text-white/20 hover:text-cyan-400 transition-colors"
           title={isMuted ? 'Unmute' : 'Mute'}

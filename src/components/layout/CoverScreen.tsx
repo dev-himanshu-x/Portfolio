@@ -1,12 +1,5 @@
 import classNames from 'classnames';
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import octopusSrc from '../../assets/images/octopus.svg';
 
 const TILE_SIZE = 60;
@@ -18,7 +11,7 @@ const useScreenSize = () => {
   });
 
   useEffect(() => {
-    let timeoutId: any = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
     const handleResize = () => {
       if (timeoutId) clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
@@ -34,13 +27,11 @@ const useScreenSize = () => {
 
 const useScreenTiles = (tileSize: number, extraY = 0) => {
   const { width: w, height: h } = useScreenSize();
-  const [nX, setNX] = useState<number>(Math.ceil(w / tileSize));
-  const [nY, setNY] = useState<number>(Math.ceil(h / tileSize) + extraY);
-
-  useLayoutEffect(() => {
-    setNX(Math.ceil(w / tileSize));
-    setNY(Math.ceil(h / tileSize) + extraY);
-  }, [extraY, h, tileSize, w]);
+  const nX = useMemo(() => Math.ceil(w / tileSize), [w, tileSize]);
+  const nY = useMemo(
+    () => Math.ceil(h / tileSize) + extraY,
+    [h, tileSize, extraY],
+  );
 
   return { nX, nY };
 };
@@ -53,20 +44,18 @@ interface CoverScreenProps {
 
 export default function CoverScreen({ onDone }: CoverScreenProps) {
   const { nX, nY } = useScreenTiles(TILE_SIZE);
-  const [rows, setRows] = useState<number[]>();
-  const [cols, setCols] = useState<number[]>();
+  const rows = useMemo(() => createArray(nY), [nY]);
+  const cols = useMemo(() => createArray(nX), [nX]);
   const [hiddenKeys, setHiddenKeys] = useState<Record<string, boolean>>({});
   const [isEntering, setIsEntering] = useState(false);
   const touchStartY = useRef<number | null>(null);
 
-  useLayoutEffect(() => {
-    setRows(createArray(nY));
-    setCols(createArray(nX));
+  useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [nX, nY]);
+  }, []);
 
   const hideTile = useCallback((key: string) => {
     setHiddenKeys((v) => ({ ...v, [key]: true }));
@@ -93,7 +82,6 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
   };
 
   const starDelays = useMemo(() => {
-    if (!rows || !cols) return {};
     const delays: Record<string, string> = {};
     rows.forEach((r) => {
       cols.forEach((c) => {
@@ -104,13 +92,13 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
   }, [rows, cols]);
 
   const tiles = useMemo(() => {
-    if (!rows || !cols) return null;
     return rows.map((row) => (
       <div key={row} className="flex flex-nowrap h-[60px]">
         {cols.map((col) => {
           const key = `${row}.${col}`;
           const isHidden = hiddenKeys[key];
           return (
+            // biome-ignore lint/a11y/noStaticElementInteractions: decorative scratch-tile hover effect; the parent overlay already exposes an accessible way to dismiss (role="button", Enter/Space)
             <div
               key={key}
               onMouseEnter={() => hideTile(key)}
@@ -125,7 +113,7 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
               }}
               data-key={key}
               className={classNames(
-                'w-[60px] min-w-[60px] h-[60px] transition-all duration-700 ease-out handcrafted-sky-tiles',
+                'w-[60px] min-w-[60px] h-[60px] transition-[opacity,transform] duration-700 ease-out handcrafted-sky-tiles',
                 isHidden
                   ? 'opacity-0 pointer-events-none scale-0'
                   : 'opacity-100',
@@ -144,14 +132,16 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
   const contentOpacity = Math.max(0, 1 - scratchRatio * 5);
 
   return (
-    <div
+    <button
+      type="button"
       className={classNames(
-        'fixed inset-0 z-[100] transition-opacity duration-1000 bg-transparent',
+        'fixed inset-0 z-[100] w-full h-full text-left transition-opacity duration-1000 bg-transparent',
         isEntering ? 'opacity-0 pointer-events-none' : 'opacity-100',
       )}
       onClick={handleEnter}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      aria-label="Enter site"
     >
       <div className="absolute inset-0 z-10 select-none overflow-hidden">
         {tiles}
@@ -173,6 +163,6 @@ export default function CoverScreen({ onDone }: CoverScreenProps) {
           Scratch or tap anywhere to explore
         </p>
       </div>
-    </div>
+    </button>
   );
 }

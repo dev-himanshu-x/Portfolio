@@ -1,13 +1,20 @@
 import classNames from 'classnames';
-import { Briefcase, Code, Home, Mail, User } from 'lucide-react';
+import {
+  Briefcase,
+  Code,
+  Home,
+  type LucideIcon,
+  Mail,
+  User,
+} from 'lucide-react';
 import { useEffect } from 'react';
 
-const iconMap: any = {
-  Home: Home,
-  User: User,
-  Briefcase: Briefcase,
-  Code: Code,
-  Mail: Mail,
+const iconMap: Record<string, LucideIcon> = {
+  Home,
+  User,
+  Briefcase,
+  Code,
+  Mail,
 };
 
 const MenuItem = ({
@@ -69,7 +76,7 @@ export default function SideNav() {
     <div
       className={classNames(
         'fixed z-20',
-        'top-2 left-1/2 -translate-x-1/2',
+        'top-6 left-1/2 -translate-x-1/2',
         'md:right-2 md:left-auto md:top-1/2 md:-translate-y-1/2 md:translate-x-0',
         'transition-colors',
         'mix-blend-difference text-white bg-transparent',
@@ -82,8 +89,8 @@ export default function SideNav() {
           'md:px-2 md:py-4 md:gap-4',
         )}
       >
-        {menuItems.map((item, idx) => (
-          <MenuItem key={idx} {...item} />
+        {menuItems.map((item) => (
+          <MenuItem key={item.label} {...item} />
         ))}
       </div>
     </div>

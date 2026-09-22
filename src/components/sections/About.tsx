@@ -1,65 +1,106 @@
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Cloud,
+  Code2,
+  Database,
+  Dog,
+  Layers,
+  Layout,
+  Share2,
+  Webhook,
+} from 'lucide-react';
+import { useState } from 'react';
+import {
+  SiAntdesign,
+  SiAxios,
+  SiBiome,
+  SiBootstrap,
+  SiBun,
+  SiCloudflare,
+  SiCss,
+  SiDjango,
+  SiEslint,
+  SiGit,
+  SiGithub,
+  SiHtml5,
+  SiJavascript,
+  SiJson,
+  SiNextdotjs,
+  SiOpenapiinitiative,
+  SiPrettier,
+  SiPython,
+  SiReact,
+  SiTailwindcss,
+  SiTanstack,
+  SiTypescript,
+  SiVite,
+} from 'react-icons/si';
 import { Parallax } from 'react-scroll-parallax';
 import jellyfish from '../../assets/images/jellyfish.svg';
+import FadeInImage from '../ui/FadeInImage';
+import Reveal from '../ui/Reveal';
 
 const skillCategories = [
   {
-    title: 'Frontend & UI Engineering',
+    title: 'Frontend',
+    icon: Layout,
     skills: [
-      'React.js',
-      'Next.js',
-      'TanStack Start',
-      'TypeScript',
-      'Zustand',
-      'AngularJS',
-      'Tailwind CSS',
-      'Shadcn UI',
-      'Ant Design',
-      'Bootstrap',
-      'TanStack Table',
+      { name: 'React.js', icon: SiReact },
+      { name: 'Next.js', icon: SiNextdotjs },
+      { name: 'TanStack Router', icon: SiTanstack },
+      { name: 'TanStack Start', icon: SiTanstack },
+      { name: 'TanStack Virtual', icon: SiTanstack },
+      { name: 'Tailwind CSS', icon: SiTailwindcss },
+      { name: 'Bootstrap', icon: SiBootstrap },
+      { name: 'Ant Design', icon: SiAntdesign },
+      { name: 'PeerJS', icon: Share2 },
     ],
   },
   {
-    title: 'Backend & Data Systems',
+    title: 'Languages',
+    icon: Code2,
     skills: [
-      'Python',
-      'Django',
-      'Java',
-      'PostgreSQL',
-      'TanStack Query',
-      'Axios / REST APIs',
-      'OpenAPI / Hey API',
-      'Zod',
-      'SMTP / Nodemailer',
+      { name: 'JavaScript', icon: SiJavascript },
+      { name: 'TypeScript', icon: SiTypescript },
+      { name: 'Python', icon: SiPython },
+      { name: 'HTML5', icon: SiHtml5 },
+      { name: 'CSS3', icon: SiCss },
     ],
   },
   {
-    title: 'Interactive & Real-time',
+    title: 'Backend & APIs',
+    icon: Database,
     skills: [
-      'Framer Motion',
-      'GSAP',
-      'Three.js',
-      'WebSockets',
-      'WebRTC (PeerJS)',
-      'React DnD',
-      'React Email',
+      { name: 'Django', icon: SiDjango },
+      { name: 'REST APIs', icon: Webhook },
+      { name: 'Axios', icon: SiAxios },
+      { name: 'OpenAPI', icon: SiOpenapiinitiative },
+      { name: 'JSON Server', icon: SiJson },
+      { name: 'TanStack Query', icon: SiTanstack },
+      { name: 'Zustand', icon: Layers },
     ],
   },
   {
-    title: 'Cloud, DevOps & Tooling',
+    title: 'Cloud & Tools',
+    icon: Cloud,
     skills: [
-      'Cloudflare (Workers / Pages / KV)',
-      'Vercel (Deployments)',
-      'Docker',
-      'Linux',
-      'Nginx',
-      'Git & CI/CD',
-      'Bun',
-      'Vite',
+      { name: 'Cloudflare', icon: SiCloudflare },
+      { name: 'Git', icon: SiGit },
+      { name: 'GitHub', icon: SiGithub },
+      { name: 'Bun', icon: SiBun },
+      { name: 'Vite', icon: SiVite },
+      { name: 'ESLint', icon: SiEslint },
+      { name: 'Biome', icon: SiBiome },
+      { name: 'Prettier', icon: SiPrettier },
+      { name: 'Husky', icon: Dog },
     ],
   },
 ];
 
 export default function About() {
+  const [activeTab, setActiveTab] = useState(0);
+  const activeCategory = skillCategories[activeTab];
+
   return (
     <div className="w-full flex items-center justify-center transition-all relative bg-[#020c1b] text-white py-24 overflow-hidden">
       <div id="about-me" className="absolute top-0" />
@@ -69,10 +110,12 @@ export default function About() {
           speed={15}
           className="absolute bottom-20 left-10 w-48 sm:w-72 md:w-96"
         >
-          <img
+          <FadeInImage
             src={jellyfish}
             className="w-full animate-float-slow opacity-40"
             alt="Jellyfish"
+            loading="lazy"
+            decoding="async"
           />
         </Parallax>
 
@@ -93,99 +136,152 @@ export default function About() {
       <div className="w-full mx-auto px-4 sm:px-8 lg:px-16 xl:px-24 relative z-10">
         <div className="flex flex-col xl:flex-row gap-12 xl:gap-20 items-start w-full">
           <div className="w-full max-w-[420px] shrink-0">
-            <header className="space-y-4 xl:sticky xl:top-32">
-              <div className="flex items-center gap-4 text-cyan-400">
-                <span className="w-12 h-px bg-cyan-400"></span>
-                <span className="text-xs font-black uppercase tracking-[0.4em]">
-                  About Me
-                </span>
-              </div>
-              <h1 className="text-5xl sm:text-7xl font-black tracking-tighter leading-none">
-                CRAFTING <span className="text-cyan-600/70">DIGITAL</span>
-                <br />
-                ECOSYSTEMS
-              </h1>
-            </header>
+            <Reveal>
+              <header className="space-y-4 xl:sticky xl:top-32">
+                <div className="flex items-center gap-4 text-cyan-400">
+                  <span className="w-12 h-px bg-cyan-400"></span>
+                  <span className="text-xs font-black uppercase tracking-[0.4em]">
+                    About Me
+                  </span>
+                </div>
+                <h1 className="text-5xl sm:text-7xl font-black tracking-tighter leading-none">
+                  <span className="whitespace-nowrap">BUILDING WITH</span>
+                  <br />
+                  <span className="whitespace-nowrap">
+                    <span className="text-cyan-600/70">REACT</span> &amp;
+                  </span>
+                  <br />
+                  TYPESCRIPT
+                </h1>
+              </header>
+            </Reveal>
           </div>
 
           <div className="flex-1 w-full lg:pl-10 space-y-16">
-            <div className="space-y-8 text-lg sm:text-xl text-cyan-100/60 leading-relaxed font-medium">
+            <Reveal
+              delay={0.1}
+              className="text-lg sm:text-xl text-cyan-100/60 leading-relaxed font-medium"
+            >
               <p>
-                I'm <span className="text-white">Himanshu Jaiswal</span>, a
-                Frontend Architect dedicated to building high-performance,
-                robust, and scalable web infrastructures. With a foundation
-                built on {Math.max(1, new Date().getFullYear() - 2025)}+ years
-                of rigorous development, I don't just build websites, I engineer
-                high-fidelity digital systems.
-              </p>
-              <p>
-                My philosophy is simple:{' '}
+                I'm <span className="text-white">Himanshu Jaiswal</span>, a Full
+                Stack Developer with{' '}
+                {Math.max(1, new Date().getFullYear() - 2025)}+ year of hands-on
+                React and TypeScript experience, building interfaces — from
+                dynamic data tables to real-time dashboards — that stay fast,
+                accessible, and easy to maintain as they grow, because{' '}
                 <span className="text-cyan-400 italic">
-                  Code quality is non-negotiable.
-                </span>{' '}
-                Whether it's architecting complex React state machines or
-                fine-tuning performance bottlenecks, I bridge the gap between
-                technical requirements and production-ready reality.
+                  code quality is non-negotiable.
+                </span>
               </p>
-            </div>
+            </Reveal>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <Reveal
+              delay={0.15}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-8"
+            >
               <div className="p-8 bg-cyan-950/20 rounded-3xl border border-white/5 backdrop-blur-sm group hover:border-cyan-400/30 transition-all shadow-lg">
                 <h3 className="text-white font-black uppercase tracking-widest text-sm mb-4">
                   Core Philosophy
                 </h3>
                 <p className="text-cyan-100/40 text-base">
-                  Performance isn't a feature; it's the architecture. I build
-                  for scale, optimized for speed.
+                  Performance isn't optional. I build fast by default and
+                  optimize what's actually slow.
                 </p>
               </div>
               <div className="p-8 bg-cyan-950/20 rounded-3xl border border-white/5 backdrop-blur-sm group hover:border-cyan-400/30 transition-all shadow-lg">
                 <h3 className="text-white font-black uppercase tracking-widest text-sm mb-4">
-                  Technical Prowess
+                  Where I Focus
                 </h3>
                 <p className="text-cyan-100/40 text-base">
-                  Specializing in the React ecosystem, with a deep dive into
-                  state management, SSR, and frontend infrastructure.
+                  Deep in the React ecosystem: state management, data tables,
+                  forms, and the plumbing that connects a UI to real APIs.
                 </p>
               </div>
-            </div>
+            </Reveal>
 
             <div className="relative pt-8">
               <div className="absolute -left-20 top-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
 
-              <h2 className="text-3xl font-black text-white mb-10 flex items-center gap-6 uppercase tracking-tighter relative z-10">
-                Technical Arsenal
-                <span className="flex-1 h-[2px] bg-gradient-to-r from-cyan-500/30 to-transparent"></span>
-              </h2>
+              <Reveal>
+                <div className="flex items-center gap-4 text-cyan-400 mb-4 relative z-10">
+                  <span className="w-12 h-px bg-cyan-400"></span>
+                  <span className="text-xs font-black uppercase tracking-[0.4em]">
+                    Skills
+                  </span>
+                </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-                {skillCategories.map((category, idx) => (
-                  <div
-                    key={idx}
-                    className="group relative bg-[#061224]/80 backdrop-blur-md rounded-2xl border border-cyan-900/40 p-6 overflow-hidden hover:border-cyan-500/50 transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-                  >
-                    <div className="absolute top-0 left-0 w-1 h-full bg-cyan-500/20 group-hover:bg-cyan-400 transition-colors duration-500" />
-                    <div className="absolute -right-10 -bottom-10 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all duration-700" />
+                <h2 className="text-4xl sm:text-5xl font-black text-white mb-10 flex items-center gap-6 uppercase tracking-tighter relative z-10">
+                  Technical Arsenal
+                  <span className="flex-1 h-[2px] bg-gradient-to-r from-cyan-500/30 to-transparent"></span>
+                </h2>
+              </Reveal>
 
-                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-cyan-400 mb-6 flex items-center gap-3">
-                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                      {category.title}
-                    </h3>
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="relative z-10 bg-[#061224]/80 backdrop-blur-md rounded-2xl border border-cyan-900/40 shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden"
+              >
+                <div className="flex flex-wrap gap-2 p-3 border-b border-white/5">
+                  {skillCategories.map((category, idx) => (
+                    <button
+                      key={category.title}
+                      type="button"
+                      onClick={() => setActiveTab(idx)}
+                      className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-colors duration-300 ${
+                        activeTab === idx
+                          ? 'text-[#020c1b]'
+                          : 'text-cyan-300/60 hover:text-cyan-200 hover:bg-white/5'
+                      }`}
+                    >
+                      {activeTab === idx && (
+                        <motion.span
+                          layoutId="skills-tab-highlight"
+                          className="absolute inset-0 bg-cyan-400 rounded-xl"
+                          transition={{
+                            type: 'spring',
+                            stiffness: 400,
+                            damping: 30,
+                          }}
+                        />
+                      )}
+                      <category.icon
+                        size={14}
+                        strokeWidth={2.5}
+                        className="relative z-10"
+                      />
+                      <span className="relative z-10">{category.title}</span>
+                    </button>
+                  ))}
+                </div>
 
-                    <div className="flex flex-wrap gap-2.5">
-                      {category.skills.map((skill, sIdx) => (
-                        <div
-                          key={sIdx}
-                          className="flex items-center gap-2 px-3 py-1.5 bg-cyan-950/30 border border-white/5 rounded text-sm font-bold text-cyan-100/70 hover:bg-cyan-900/80 hover:text-white hover:border-cyan-400/40 transition-all cursor-default"
+                <div className="p-6 sm:p-8 min-h-[160px] flex items-start">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeTab}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2, ease: 'easeOut' }}
+                      className="flex flex-wrap gap-3 w-full"
+                    >
+                      {activeCategory.skills.map((skill, sIdx) => (
+                        <motion.span
+                          key={skill.name}
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: sIdx * 0.03, duration: 0.25 }}
+                          className="flex items-center gap-2.5 px-4 py-2 bg-cyan-950/30 border border-white/5 rounded-lg text-sm font-bold text-cyan-100/70 hover:bg-cyan-900/80 hover:text-white hover:border-cyan-400/40 transition-colors cursor-default"
                         >
-                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-500/50" />
-                          {skill}
-                        </div>
+                          <skill.icon size={16} className="text-cyan-400" />
+                          {skill.name}
+                        </motion.span>
                       ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>

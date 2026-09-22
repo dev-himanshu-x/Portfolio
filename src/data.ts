@@ -22,14 +22,24 @@ export interface ContactItem {
 
 export const EXPERIENCE: CareerItem[] = [
   {
-    role: 'Frontend Developer (Intern)',
-    company: 'TEAM ERP',
-    period: 'Sep 2025 — PRESENT',
+    role: 'Frontend Developer',
+    company: 'ERP Eduverse',
+    period: 'Jun 2026 — PRESENT',
     points: [
-      'Building responsive, accessible user interfaces using React and TypeScript.',
-      'Delivering user-facing features and reusable UI components that improve product velocity.',
-      'Partnering with product and backend teams to integrate REST APIs and optimize performance.',
-      'Improving layout responsiveness and accessibility across the application.',
+      'Building enterprise-grade ERP interfaces with React, TypeScript, TanStack Router, TanStack Query, Ant Design, and Tailwind CSS.',
+      'Shipping data-driven workflows across Academics, Curriculum, Student Registration, HR, Admissions, Support, and Reporting modules.',
+      'Building CO-PO mapping, drag-and-drop flows, dynamic data tables with column controls, and Excel/PDF exports for a platform used daily by staff and students.',
+      'Working from OpenAPI specs and REST APIs, with Zustand and Vite keeping the frontend fast and predictable at scale.',
+    ],
+  },
+  {
+    role: 'Full Stack Developer Intern',
+    company: 'Team ERP',
+    period: 'Jan 2026 — May 2026',
+    points: [
+      'Built responsive, production-ready interfaces for the KIET and Epoque websites using React, Next.js, JavaScript, and Bootstrap.',
+      'Designed reusable UI components and integrated them with backend APIs alongside design and engineering teams.',
+      'Refined layouts, forms, and visual consistency to deliver polished, accessible experiences across both sites.',
     ],
   },
 ];
@@ -133,5 +143,5 @@ export const CONTACT_LINKS: ContactItem[] = [
   },
   { label: 'X (Twitter)', icon: 'twitter', url: 'https://x.com/io_ohimanshu' },
   { label: 'Email', icon: 'mail', url: 'mailto:iam.himanshu.x@gmail.com' },
-  { label: 'Resume', icon: 'file', url: '#' },
+  { label: 'Resume', icon: 'file', url: '/Himanshu_Jaiswal_Resume.pdf' },
 ];
