@@ -22,6 +22,9 @@ jobs:
       - name: Install deps
         run: bun install
 
+      - name: Sync branch
+        run: git pull --rebase origin main
+
       - name: Fetch repos
         run: bun run scripts/fetchRepos.ts
         env:
@@ -31,9 +34,12 @@ jobs:
         run: |
           git config --global user.name "bot"
           git config --global user.email "bot@users.noreply.github.com"
+
           git add src/data/repos.json
-          git commit -m "chore: update repos" || echo "No changes"
-          git checkout -- .
-          git clean -fd
-          git pull --rebase --autostash origin main
-          git push
+
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update repos"
+            git push origin HEAD:main
+          else
+            echo "No changes to commit"
+          fi
