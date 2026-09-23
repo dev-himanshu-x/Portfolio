@@ -19,11 +19,11 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
 
-      - name: Install deps
-        run: bun install
-
       - name: Sync branch
         run: git pull --rebase origin main
+
+      - name: Install deps
+        run: bun install
 
       - name: Fetch repos
         run: bun run scripts/fetchRepos.ts
