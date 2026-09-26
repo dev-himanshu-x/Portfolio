@@ -33,7 +33,7 @@ export const EXPERIENCE: CareerItem[] = [
     ],
   },
   {
-    role: 'Full Stack Developer Intern',
+    role: 'Full Stack Developer',
     company: 'Team ERP',
     period: 'Jan 2026 — May 2026',
     points: [
@@ -51,7 +51,7 @@ export const PROJECTS: ProjectItem[] = [
     repoLink: 'https://github.com/dev-himanshu-x/MedSync',
     liveLink: 'https://medsync-hms.vercel.app',
     description:
-      'A full-featured, web-based Hospital Management System with role-based access control for Doctors and Patients.',
+      'A comprehensive Hospital Management System handling role-based workflows for Doctors, Patients, and Admins. Features secure appointment scheduling and medical record management.',
     tech: ['AngularJS', 'Bootstrap', 'JavaScript'],
   },
   {
@@ -60,7 +60,7 @@ export const PROJECTS: ProjectItem[] = [
     repoLink: 'https://github.com/dev-himanshu-x/PeerPulse',
     liveLink: 'https://reactjs-peerjs-chat-app.vercel.app',
     description:
-      'A peer-to-peer video chat app with screen sharing, live messaging, and room-based collaboration.',
+      'A real-time, WhatsApp-style communication platform powered by WebRTC and PeerJS. Features peer-to-peer video rooms and instant messaging with a fluid UI.',
     tech: ['React', 'WebRTC', 'PeerJS', 'JavaScript'],
   },
   {
@@ -69,7 +69,7 @@ export const PROJECTS: ProjectItem[] = [
     repoLink: 'https://github.com/dev-himanshu-x/BrightSync',
     liveLink: 'https://bright-sync.vercel.app',
     description:
-      'A role-based task management application with an interactive calendar interface.',
+      'An enterprise-grade task management system featuring role-based access control (RBAC) and an interactive calendar interface, streamlining team workflows.',
     tech: ['React', 'TypeScript', 'Tailwind'],
   },
   {
@@ -78,7 +78,7 @@ export const PROJECTS: ProjectItem[] = [
     repoLink: 'https://github.com/dev-himanshu-x/NeoCast',
     liveLink: 'https://neocast-openmeteo.vercel.app/',
     description:
-      'A neo-brutalist weather dashboard for Indian cities, built with React and Vite.',
+      'A striking neo-brutalist weather dashboard providing real-time forecasts for Indian cities, built with React, Vite, and external API integrations.',
     tech: ['React', 'Vite', 'Weather API'],
   },
   {
@@ -87,7 +87,7 @@ export const PROJECTS: ProjectItem[] = [
     repoLink: 'https://github.com/dev-himanshu-x/XeroTask',
     liveLink: 'https://todo-react-js-ivory.vercel.app/',
     description:
-      'A polished todo manager with drag-and-drop organization and local persistence.',
+      'A polished task management interface combining React, Vite, and Tailwind CSS with Material UI dialogs for a seamless user experience.',
     tech: ['React', 'Material UI', 'JavaScript'],
   },
   {
@@ -95,7 +95,7 @@ export const PROJECTS: ProjectItem[] = [
     year: 2026,
     liveLink: '#top',
     description:
-      'An immersive single-page portfolio with custom motion and high-performance frontend architecture.',
+      'An immersive, highly-optimized single-page portfolio showcasing modern frontend architecture, fluid Framer Motion animations, and strict code quality.',
     tech: ['React', 'TypeScript', 'Framer Motion', 'Biome'],
   },
   {
@@ -104,7 +104,7 @@ export const PROJECTS: ProjectItem[] = [
     repoLink: 'https://github.com/dev-himanshu-x/AutoTable',
     liveLink: 'https://autotable.vercel.app',
     description:
-      'A sleek web app to view any JSON API data in a sortable, paginated table.',
+      'A powerful developer tool that dynamically generates sortable, paginated data tables from any JSON API URL with advanced column controls.',
     tech: ['React', 'TypeScript', 'TanStack Table'],
   },
   {
@@ -113,7 +113,7 @@ export const PROJECTS: ProjectItem[] = [
     repoLink: 'https://github.com/dev-himanshu-x/TanTask',
     liveLink: 'https://dynamic-table-theta-inky.vercel.app',
     description:
-      'A configurable data table with sorting, filtering, pagination, and column resizing.',
+      'A feature-rich task manager built on the bleeding edge with TanStack Start. Incorporates dark mode, inline editing, filtering, and robust data persistence.',
     tech: ['React', 'TanStack Table', 'TypeScript', 'Vite'],
   },
   {
@@ -121,7 +121,8 @@ export const PROJECTS: ProjectItem[] = [
     year: 2026,
     repoLink: 'https://github.com/dev-himanshu-x/GridLock',
     liveLink: 'https://gridlock-tictac.vercel.app/',
-    description: 'A two-player Tic Tac Toe game built with React and Vite.',
+    description:
+      'An interactive, fully responsive Tic Tac Toe game demonstrating clean React component architecture and optimized local state management.',
     tech: ['React', 'Vite', 'Game'],
   },
   {
@@ -129,7 +130,7 @@ export const PROJECTS: ProjectItem[] = [
     year: 2026,
     repoLink: 'https://github.com/dev-himanshu-x/react-antd-form',
     description:
-      'A dynamic form engine with validation, multi-step flows, and reusable field schemas.',
+      'A robust dynamic form engine engineered with TanStack Start and Ant Design. Handles complex multi-step workflows, real-time validations, and reusable schemas.',
     tech: ['React', 'TypeScript', 'Ant Design', 'Vite'],
   },
 ];

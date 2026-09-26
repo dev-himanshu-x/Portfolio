@@ -53,7 +53,7 @@ const skillCategories = [
       { name: 'Tailwind CSS', icon: SiTailwindcss },
       { name: 'Bootstrap', icon: SiBootstrap },
       { name: 'Ant Design', icon: SiAntdesign },
-      { name: 'PeerJS', icon: Share2 },
+      { name: 'PeerJS (WebRTC)', icon: Share2 },
     ],
   },
   {
@@ -108,7 +108,7 @@ export default function About() {
       <div className="absolute inset-0 pointer-events-none opacity-20 overflow-hidden">
         <Parallax
           speed={15}
-          className="absolute bottom-20 left-10 w-48 sm:w-72 md:w-96"
+          className="absolute -bottom-20 left-10 w-48 sm:w-72 md:w-96"
         >
           <FadeInImage
             src={jellyfish}
@@ -163,41 +163,11 @@ export default function About() {
               className="text-lg sm:text-xl text-cyan-100/60 leading-relaxed font-medium"
             >
               <p>
-                I'm <span className="text-white">Himanshu Jaiswal</span>, a Full
-                Stack Developer with{' '}
-                {Math.max(1, new Date().getFullYear() - 2025)}+ year of hands-on
-                React and TypeScript experience, building interfaces — from
-                dynamic data tables to real-time dashboards — that stay fast,
-                accessible, and easy to maintain as they grow, because{' '}
-                <span className="text-cyan-400 italic">
-                  code quality is non-negotiable.
-                </span>
+                I'm Himanshu Jaiswal, a Frontend Developer with 1+ year of hands-on experience in the React ecosystem. I bridge complex APIs with fluid, accessible interfaces, whether building modular ERP workflows or real-time dashboards. For me, high performance, robust type-safety, thoughtful UX, and <span className="text-cyan-400 italic">code quality are non-negotiable.</span>
               </p>
             </Reveal>
 
-            <Reveal
-              delay={0.15}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-8"
-            >
-              <div className="p-8 bg-cyan-950/20 rounded-3xl border border-white/5 backdrop-blur-sm group hover:border-cyan-400/30 transition-all shadow-lg">
-                <h3 className="text-white font-black uppercase tracking-widest text-sm mb-4">
-                  Core Philosophy
-                </h3>
-                <p className="text-cyan-100/40 text-base">
-                  Performance isn't optional. I build fast by default and
-                  optimize what's actually slow.
-                </p>
-              </div>
-              <div className="p-8 bg-cyan-950/20 rounded-3xl border border-white/5 backdrop-blur-sm group hover:border-cyan-400/30 transition-all shadow-lg">
-                <h3 className="text-white font-black uppercase tracking-widest text-sm mb-4">
-                  Where I Focus
-                </h3>
-                <p className="text-cyan-100/40 text-base">
-                  Deep in the React ecosystem: state management, data tables,
-                  forms, and the plumbing that connects a UI to real APIs.
-                </p>
-              </div>
-            </Reveal>
+
 
             <div className="relative pt-8">
               <div className="absolute -left-20 top-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />

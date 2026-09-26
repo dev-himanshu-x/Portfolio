@@ -116,7 +116,7 @@ export default function Hero() {
               </h2>
 
               <p className="text-cyan-100/50 text-center font-medium text-base sm:text-lg leading-relaxed mb-8">
-                Building fast, accessible interfaces with React and TypeScript.
+                Designing and building fast, human-centered interfaces with React.
               </p>
             </Reveal>
 
@@ -176,7 +176,7 @@ export default function Hero() {
           <div className="flex-1 flex flex-col justify-center w-full lg:pl-2">
             <Reveal delay={0.1} className="mb-12 relative">
               <h1 className="text-5xl sm:text-8xl lg:text-[9rem] font-black text-white leading-[0.85] tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] whitespace-nowrap">
-                FULL STACK
+                FRONTEND
               </h1>
               <h1 className="text-5xl sm:text-8xl lg:text-[9rem] font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300/30 via-cyan-500/50 to-blue-900/10 leading-[0.85] tracking-tighter drop-shadow-[0_5px_15px_rgba(34,211,238,0.1)]">
                 DEVELOPER

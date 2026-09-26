@@ -15,18 +15,22 @@ const INITIAL_COUNT = 8;
 // Live-vs-not-live is applied on top of this order, so a not-live repo
 // never outranks a live one.
 const FEATURED_ORDER = [
-  'MedSync-Hms',
-  'BrightSync-HR',
-  'PeerPulse-Chatapp',
-  'Sicuaura-Ecommerce',
-  'Trivexa-stockmarket',
   'Sfridoo-Recycle',
-  'Portfolio',
+  'Attendance-cybervidya',
+  'PeerPulse-Chatapp',
+  'BrightSync-HR',
   'AutoTable',
+  'MedSync-Hms',
+  'NeoCast-Weather',
+  'Trivexa-stockmarket',
+  'Sicuaura-Ecommerce',
   'TanTask-Todo',
   'XeroTask-Todo',
-  'NeoCast-Weather',
   'Tic-Tac-Toe',
+  'Portfolio',
+  'Email-Template',
+  'React-Antd-Form',
+  'Cloudflare-Csv-Template',
 ];
 
 export default function Projects() {
